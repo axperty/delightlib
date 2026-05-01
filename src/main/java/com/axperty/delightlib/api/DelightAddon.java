@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,9 +51,9 @@ public class DelightAddon {
     private DelightAddon(String modId, IEventBus modEventBus) {
         this.modId = modId;
         this.modEventBus = modEventBus;
-        this.items = DeferredRegister.create(Registries.ITEM, modId);
-        this.blocks = DeferredRegister.create(Registries.BLOCK, modId);
-        this.blockEntityTypes = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, modId);
+        this.items = DeferredRegister.create(ForgeRegistries.ITEMS, modId);
+        this.blocks = DeferredRegister.create(ForgeRegistries.BLOCKS, modId);
+        this.blockEntityTypes = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, modId);
         this.creativeTabs = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, modId);
     }
 

@@ -62,13 +62,13 @@ public class CookingRecipeBuilder {
 
         JsonObject result = new JsonObject();
         result.addProperty("count", resultCount);
-        result.addProperty("id", resultId);
+        result.addProperty("item", resultId);
         recipe.add("result", result);
 
         if (containerId != null) {
             JsonObject container = new JsonObject();
             container.addProperty("count", 1);
-            container.addProperty("id", containerId);
+            container.addProperty("item", containerId);
             recipe.add("container", container);
         }
         if (cookingTime != 200) recipe.addProperty("cookingtime", cookingTime);

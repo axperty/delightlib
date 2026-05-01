@@ -63,7 +63,7 @@ public class ShapedRecipeBuilder {
 
         JsonObject result = new JsonObject();
         result.addProperty("count", resultCount);
-        result.addProperty("id", resultId);
+        result.addProperty("item", resultId);
         recipe.add("result", result);
 
         addon.addRecipe(name, recipe);

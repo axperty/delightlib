@@ -14,22 +14,29 @@ authors="${mod_authors}"
 description="A library mod for Farmer's Delight that aims to make other add-ons easily."
 
 [[dependencies.${mod_id}]]
-    modId="neoforge"
-    type="required"
-    versionRange="[${neo_version},)"
-    ordering="NONE"
-    side="BOTH"
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
 
 [[dependencies.${mod_id}]]
-    modId="minecraft"
-    type="required"
-    versionRange="${minecraft_version_range}"
-    ordering="NONE"
-    side="BOTH"
+modId="farmersdelight"
+mandatory=true
+versionRange="[0,)"
+ordering="NONE"
+side="BOTH"
 
 [[dependencies.${mod_id}]]
-    modId="farmersdelight"
-    type="required"
-    versionRange="*"
-    ordering="NONE"
-    side="BOTH"
+modId="expandeddelight"
+mandatory=false
+versionRange="[0,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="casualness_delight"
+mandatory=false
+versionRange="[0,)"
+ordering="AFTER"
+side="BOTH"

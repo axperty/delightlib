@@ -2,7 +2,6 @@ package com.axperty.delightlib.api.builder;
 
 import com.axperty.delightlib.api.DelightAddon;
 import com.axperty.delightlib.api.FoodDuration;
-import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodProperties;
@@ -60,14 +59,14 @@ public class FoodBuilder {
     public FoodBuilder hideEffectTooltip() { this.hasFoodEffectTooltip = false; return this; }
     public FoodBuilder customTooltip() { this.hasCustomTooltip = true; return this; }
 
-    public FoodBuilder withEffect(Holder<MobEffect> effect, int duration, int amplifier, float chance) {
-        effects.add(new EffectEntry(() -> new MobEffectInstance(effect, duration, amplifier), chance));
+    public FoodBuilder withEffect(Supplier<MobEffect> effect, int duration, int amplifier, float chance) {
+        effects.add(new EffectEntry(() -> new MobEffectInstance(effect.get(), duration, amplifier), chance));
         return this;
     }
 
     public FoodBuilder withNourishment(FoodDuration duration) {
         int ticks = duration.getTicks();
-        effects.add(new EffectEntry(() -> new MobEffectInstance(ModEffects.NOURISHMENT, ticks, 0, false, false), 1.0f));
+        effects.add(new EffectEntry(() -> new MobEffectInstance(ModEffects.NOURISHMENT.get(), ticks, 0, false, false), 1.0f));
         return this;
     }
 
@@ -75,9 +74,9 @@ public class FoodBuilder {
         addon.trackFood(name);
 
         FoodProperties.Builder foodBuilder = new FoodProperties.Builder()
-                .nutrition(nutrition).saturationModifier(saturation);
+                .nutrition(nutrition).saturationMod(saturation);
         if (fast) foodBuilder.fast();
-        if (alwaysEdible) foodBuilder.alwaysEdible();
+        if (alwaysEdible) foodBuilder.alwaysEat();
         for (EffectEntry e : effects) foodBuilder.effect(e.effect, e.chance);
 
         final FoodProperties food = foodBuilder.build();

@@ -32,9 +32,9 @@ public class KnifeBuilder {
         final Tier t = tier;
 
         return addon.registerItem(name, () -> {
-            Item.Properties props = new Item.Properties().attributes(KnifeItem.createAttributes(t, ad, as));
+            Item.Properties props = new Item.Properties();
             if (fr) props = props.fireResistant();
-            return new KnifeItem(t, props);
+            return new KnifeItem(t, ad, as, props);
         });
     }
 }

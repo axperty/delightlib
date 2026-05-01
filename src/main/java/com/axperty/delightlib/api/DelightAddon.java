@@ -13,12 +13,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.neoforged.neoforge.items.wrapper.InvWrapper;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.registries.DeferredRegister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -195,14 +192,7 @@ public class DelightAddon {
         blockEntityTypes.register(modEventBus);
         creativeTabs.register(modEventBus);
 
-        modEventBus.addListener((RegisterCapabilitiesEvent event) -> {
-            if (!cabinetBlocks.isEmpty()) {
-                event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,
-                        cabinetBlockEntityType.get(), (be, ctx) -> new InvWrapper(be));
-            }
-        });
-
-        modEventBus.addListener((net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent event) ->
+        modEventBus.addListener((net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent event) ->
             event.enqueueWork(() -> cabinetBlocks.forEach(s -> {
                 if (s.get() instanceof DelightCabinetBlock cab) cab.setBlockEntityType(cabinetBlockEntityType);
             }))

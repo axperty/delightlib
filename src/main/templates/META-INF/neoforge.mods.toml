@@ -1,0 +1,35 @@
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+issueTrackerURL = "https://github.com/axperty/delightlib/issues"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+displayURL = "https://github.com/axperty/delightlib"
+logoFile="assets/delightlib/logo.png"
+logoBlur = false
+authors="${mod_authors}"
+description="A library mod for Farmer's Delight that aims to make other add-ons easily."
+
+[[dependencies.${mod_id}]]
+    modId="neoforge"
+    type="required"
+    versionRange="[${neo_version},)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="farmersdelight"
+    type="required"
+    versionRange="*"
+    ordering="NONE"
+    side="BOTH"

@@ -43,12 +43,12 @@ public class DelightDataGenerator implements DataProvider {
         String modId = addon.getModId();
 
         if (!addon.getKnifeNames().isEmpty()) {
-            futures.add(saveTag(cache, "c", "item", "tools/knife", addon.getKnifeNames(), modId));
-            futures.add(saveTag(cache, "farmersdelight", "item", "tools/knives", addon.getKnifeNames(), modId));
+            futures.add(saveTag(cache, "forge", "items", "tools/knives", addon.getKnifeNames(), modId));
+            futures.add(saveTag(cache, "farmersdelight", "items", "tools/knives", addon.getKnifeNames(), modId));
         }
         if (!addon.getCabinetNames().isEmpty()) {
-            futures.add(saveTag(cache, "farmersdelight", "block", "cabinets", addon.getCabinetNames(), modId));
-            futures.add(saveTag(cache, "farmersdelight", "item", "cabinets", addon.getCabinetNames(), modId));
+            futures.add(saveTag(cache, "farmersdelight", "blocks", "cabinets", addon.getCabinetNames(), modId));
+            futures.add(saveTag(cache, "farmersdelight", "items", "cabinets", addon.getCabinetNames(), modId));
         }
         return futures;
     }
@@ -163,7 +163,7 @@ public class DelightDataGenerator implements DataProvider {
             }
 
             // Crop loot table
-            futures.add(save(cache, "data", modId, "loot_table/blocks/" + crop.blockName() + ".json",
+            futures.add(save(cache, "data", modId, "loot_tables/blocks/" + crop.blockName() + ".json",
                     cropLootTable(modId, crop)));
         }
         return futures;
@@ -262,7 +262,7 @@ public class DelightDataGenerator implements DataProvider {
             pool.add("conditions", conds);
             pools.add(pool);
             loot.add("pools", pools);
-            futures.add(save(cache, "data", modId, "loot_table/blocks/" + name + ".json", loot));
+            futures.add(save(cache, "data", modId, "loot_tables/blocks/" + name + ".json", loot));
         }
         return futures;
     }
@@ -283,7 +283,7 @@ public class DelightDataGenerator implements DataProvider {
         List<CompletableFuture<?>> futures = new ArrayList<>();
         String modId = addon.getModId();
         for (Map.Entry<String, JsonObject> entry : addon.getRecipes().entrySet()) {
-            futures.add(save(cache, "data", modId, "recipe/" + entry.getKey() + ".json", entry.getValue()));
+            futures.add(save(cache, "data", modId, "recipes/" + entry.getKey() + ".json", entry.getValue()));
         }
         return futures;
     }

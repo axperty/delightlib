@@ -62,7 +62,7 @@ public class DelightAddon {
     public static DelightAddon create(String modId, IEventBus modEventBus) {
         DelightAddon addon = new DelightAddon(modId, modEventBus);
         addon.init();
-        LOGGER.info("Delight API initialized for: {}", modId);
+        LOGGER.info("Delight Lib initialized for: {}", modId);
         return addon;
     }
 

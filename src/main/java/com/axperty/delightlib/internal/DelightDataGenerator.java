@@ -295,7 +295,7 @@ public class DelightDataGenerator implements DataProvider {
     }
 
     @Override
-    public String getName() { return "Delight API: " + addon.getModId(); }
+    public String getName() { return "Delight Lib: " + addon.getModId(); }
 
     // Crate and Bag assets
 

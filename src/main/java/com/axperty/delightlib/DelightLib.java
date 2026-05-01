@@ -8,10 +8,10 @@ import org.slf4j.Logger;
 
 @Mod(DelightLib.MOD_ID)
 public class DelightLib {
-    public static final String MOD_ID = "delightapi";
+    public static final String MOD_ID = "delightlib";
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public DelightLib(IEventBus modEventBus, ModContainer modContainer) {
-        LOGGER.info("Delight API loaded");
+        LOGGER.info("Delight Lib loaded");
     }
 }

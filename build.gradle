@@ -48,17 +48,16 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
-    // Fabric-ASM / ClassTinkerers (required by Porting Lib)
+    // Fabric-ASM
     include(modImplementation("com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}")) {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
-    // Porting Lib modules (required by Farmer's Delight Refabricated)
+    // Porting Lib
     for (String module in port_lib_modules.split(",")) {
         include(modApi("io.github.fabricators_of_create.Porting-Lib:$module:$port_lib_version"))
     }
 
-    // Farmer's Delight Refabricated
     modImplementation "curse.maven:farmers-delight-refabricated-993166:7199661"
 }
 

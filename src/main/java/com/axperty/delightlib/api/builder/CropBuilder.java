@@ -43,6 +43,7 @@ public class CropBuilder {
 
         Supplier<Block> cropBlock = addon.registerBlock(blockName, () ->
                 new DelightCropBlock(Block.Properties.copy(Blocks.WHEAT), seedHolder[0]));
+        addon.addCutoutBlock(cropBlock);
 
         Supplier<Item> cropItem;
         if (isFood) {

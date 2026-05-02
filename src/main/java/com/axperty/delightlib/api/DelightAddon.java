@@ -31,6 +31,7 @@ public class DelightAddon {
 
     private final LinkedHashSet<Supplier<Item>> creativeTabItems = new LinkedHashSet<>();
     private final List<Supplier<Block>> cabinetBlocks = new ArrayList<>();
+    private final List<Supplier<Block>> cutoutBlocks = new ArrayList<>();
     private Supplier<BlockEntityType<DelightCabinetBlockEntity>> cabinetBlockEntityType;
     private final Map<String, JsonObject> recipes = new LinkedHashMap<>();
 
@@ -183,6 +184,10 @@ public class DelightAddon {
         cabinetBlocks.add(block);
     }
 
+    public void addCutoutBlock(Supplier<Block> block) {
+        cutoutBlocks.add(block);
+    }
+
     public void addRecipe(String path, JsonObject json) {
         recipes.put(path, json);
     }
@@ -199,6 +204,7 @@ public class DelightAddon {
     public Map<String, String> getLangEntries() { return Collections.unmodifiableMap(langEntries); }
     public Map<String, JsonObject> getRecipes() { return Collections.unmodifiableMap(recipes); }
     public List<CropInfo> getCropInfos() { return Collections.unmodifiableList(cropInfos); }
+    public List<Supplier<Block>> getCutoutBlocks() { return Collections.unmodifiableList(cutoutBlocks); }
 
     private static String toTitleCase(String name) {
         String[] words = name.split("_");

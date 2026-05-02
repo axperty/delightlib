@@ -6,7 +6,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import vectorwing.farmersdelight.common.block.FeastBlock;
 import vectorwing.farmersdelight.common.block.PieBlock;
-import vectorwing.farmersdelight.common.item.PlaceableItem;
+import net.minecraft.world.item.BlockItem;
 
 import java.util.function.Supplier;
 
@@ -58,12 +58,12 @@ public class PlaceableFoodBuilder {
         Supplier<Block> block;
         if (isPie) {
             final Supplier<Item> slice = sliceItem;
-            block = addon.registerBlock(name, () -> new PieBlock(Block.Properties.ofFullCopy(Blocks.CAKE), slice));
+            block = addon.registerBlock(name, () -> new PieBlock(Block.Properties.copy(Blocks.CAKE), slice));
         } else {
             final Supplier<Item> serving = servingItem;
             final boolean leftovers = hasLeftovers;
-            block = addon.registerBlock(name, () -> new FeastBlock(Block.Properties.ofFullCopy(Blocks.CAKE), serving, leftovers));
+            block = addon.registerBlock(name, () -> new FeastBlock(Block.Properties.copy(Blocks.CAKE), serving, leftovers));
         }
-        return addon.registerItem(name, () -> new PlaceableItem(block.get(), new Item.Properties().stacksTo(stack)));
+        return addon.registerItem(name, () -> new BlockItem(block.get(), new Item.Properties().stacksTo(stack)));
     }
 }

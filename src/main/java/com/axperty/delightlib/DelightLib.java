@@ -1,17 +1,15 @@
 package com.axperty.delightlib;
 
-import com.mojang.logging.LogUtils;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.Mod;
+import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Mod(DelightLib.MOD_ID)
-public class DelightLib {
+public class DelightLib implements ModInitializer {
     public static final String MOD_ID = "delightlib";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    public DelightLib(IEventBus modEventBus, ModContainer modContainer) {
+    @Override
+    public void onInitialize() {
         LOGGER.info("Delight Lib loaded");
     }
 }

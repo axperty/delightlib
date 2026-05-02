@@ -42,12 +42,12 @@ public class CropBuilder {
         final Supplier<Item>[] seedHolder = new Supplier[1];
 
         Supplier<Block> cropBlock = addon.registerBlock(blockName, () ->
-                new DelightCropBlock(Block.Properties.ofFullCopy(Blocks.WHEAT), seedHolder[0]));
+                new DelightCropBlock(Block.Properties.copy(Blocks.WHEAT), seedHolder[0]));
 
         Supplier<Item> cropItem;
         if (isFood) {
             FoodProperties food = new FoodProperties.Builder()
-                    .nutrition(nutrition).saturationModifier(saturation).build();
+                    .nutrition(nutrition).saturationMod(saturation).build();
             if (seedIsItem) {
                 cropItem = addon.registerItem(name, () ->
                         new ItemNameBlockItem(cropBlock.get(), new Item.Properties().food(food)));

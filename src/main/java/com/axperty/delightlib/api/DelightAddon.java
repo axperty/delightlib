@@ -3,22 +3,21 @@ package com.axperty.delightlib.api;
 import com.axperty.delightlib.api.builder.*;
 import com.axperty.delightlib.internal.DelightCabinetBlock;
 import com.axperty.delightlib.internal.DelightCabinetBlockEntity;
-import com.axperty.delightlib.internal.DelightDataGenerator;
 import com.google.gson.JsonObject;
-import net.minecraft.core.registries.Registries;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.neoforged.neoforge.items.wrapper.InvWrapper;
-import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,12 +28,6 @@ public class DelightAddon {
     private static final Logger LOGGER = LoggerFactory.getLogger(DelightAddon.class);
 
     private final String modId;
-    private final IEventBus modEventBus;
-
-    private final DeferredRegister<Item> items;
-    private final DeferredRegister<Block> blocks;
-    private final DeferredRegister<BlockEntityType<?>> blockEntityTypes;
-    private final DeferredRegister<CreativeModeTab> creativeTabs;
 
     private final LinkedHashSet<Supplier<Item>> creativeTabItems = new LinkedHashSet<>();
     private final List<Supplier<Block>> cabinetBlocks = new ArrayList<>();
@@ -49,31 +42,58 @@ public class DelightAddon {
     private final Map<String, String> itemModelParents = new LinkedHashMap<>();
     private final Map<String, String> langEntries = new LinkedHashMap<>();
     private final List<CropInfo> cropInfos = new ArrayList<>();
+    
+    private CreativeModeTab tab;
+    private String tabTitle;
+    private Supplier<ItemStack> tabIcon;
 
-    private DelightAddon(String modId, IEventBus modEventBus) {
+    private DelightAddon(String modId) {
         this.modId = modId;
-        this.modEventBus = modEventBus;
-        this.items = DeferredRegister.create(Registries.ITEM, modId);
-        this.blocks = DeferredRegister.create(Registries.BLOCK, modId);
-        this.blockEntityTypes = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, modId);
-        this.creativeTabs = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, modId);
     }
 
-    public static DelightAddon create(String modId, IEventBus modEventBus) {
-        DelightAddon addon = new DelightAddon(modId, modEventBus);
-        addon.init();
+    public static DelightAddon create(String modId) {
+        DelightAddon addon = new DelightAddon(modId);
         LOGGER.info("Delight Lib initialized for: {}", modId);
         return addon;
     }
 
     public DelightAddon withCreativeTab(String title, Supplier<ItemStack> icon) {
-        creativeTabs.register("tab", () -> CreativeModeTab.builder()
-                .title(Component.literal(title))
-                .icon(icon != null ? icon : () -> ItemStack.EMPTY)
-                .displayItems((params, output) -> creativeTabItems.forEach(s -> output.accept(new ItemStack(s.get()))))
-                .build()
-        );
+        this.tabTitle = title;
+        this.tabIcon = icon != null ? icon : () -> ItemStack.EMPTY;
         return this;
+    }
+
+    public void build() {
+        if (tabTitle != null) {
+            tab = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, new ResourceLocation(modId, "tab"), 
+                FabricItemGroup.builder()
+                    .title(Component.literal(tabTitle))
+                    .icon(tabIcon)
+                    .displayItems((params, output) -> creativeTabItems.forEach(s -> output.accept(new ItemStack(s.get()))))
+                    .build()
+            );
+        }
+
+        if (!cabinetBlocks.isEmpty()) {
+            Block[] valid = cabinetBlocks.stream().map(Supplier::get).toArray(Block[]::new);
+            
+            BlockEntityType<DelightCabinetBlockEntity> type = Registry.register(
+                BuiltInRegistries.BLOCK_ENTITY_TYPE,
+                new ResourceLocation(modId, "cabinet"),
+                FabricBlockEntityTypeBuilder.create((pos, state) -> new DelightCabinetBlockEntity(cabinetBlockEntityType.get(), pos, state), valid).build(null)
+            );
+            
+            cabinetBlockEntityType = () -> type;
+
+            ItemStorage.SIDED.registerForBlockEntities(
+                (be, direction) -> InventoryStorage.of((net.minecraft.world.Container) be, direction),
+                type
+            );
+
+            cabinetBlocks.forEach(s -> {
+                if (s.get() instanceof DelightCabinetBlock cab) cab.setBlockEntityType(cabinetBlockEntityType);
+            });
+        }
     }
 
     // Builder factories
@@ -140,20 +160,22 @@ public class DelightAddon {
     // Registry helpers
 
     public Supplier<Item> registerItem(String name, Supplier<Item> supplier) {
-        Supplier<Item> registered = items.register(name, supplier);
+        Item item = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(modId, name), supplier.get());
+        Supplier<Item> registered = () -> item;
         creativeTabItems.add(registered);
         return registered;
     }
 
     public Supplier<Block> registerBlock(String name, Supplier<Block> supplier) {
-        return blocks.register(name, supplier);
+        Block block = Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(modId, name), supplier.get());
+        return () -> block;
     }
 
     public Supplier<Item> getItem(String name) {
         if (name.contains(":")) {
-            return () -> net.minecraft.core.registries.BuiltInRegistries.ITEM.get(net.minecraft.resources.ResourceLocation.parse(name));
+            return () -> BuiltInRegistries.ITEM.get(new ResourceLocation(name));
         } else {
-            return () -> net.minecraft.core.registries.BuiltInRegistries.ITEM.get(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(modId, name));
+            return () -> BuiltInRegistries.ITEM.get(new ResourceLocation(modId, name));
         }
     }
 
@@ -177,42 +199,6 @@ public class DelightAddon {
     public Map<String, String> getLangEntries() { return Collections.unmodifiableMap(langEntries); }
     public Map<String, JsonObject> getRecipes() { return Collections.unmodifiableMap(recipes); }
     public List<CropInfo> getCropInfos() { return Collections.unmodifiableList(cropInfos); }
-
-    // Internal
-
-    private void init() {
-        cabinetBlockEntityType = blockEntityTypes.register("cabinet", () -> {
-            Block[] valid = cabinetBlocks.stream().map(Supplier::get).toArray(Block[]::new);
-            BlockEntityType.BlockEntitySupplier<DelightCabinetBlockEntity> factory =
-                    (pos, state) -> new DelightCabinetBlockEntity(cabinetBlockEntityType.get(), pos, state);
-            return valid.length == 0
-                    ? BlockEntityType.Builder.of(factory).build(null)
-                    : BlockEntityType.Builder.of(factory, valid).build(null);
-        });
-
-        items.register(modEventBus);
-        blocks.register(modEventBus);
-        blockEntityTypes.register(modEventBus);
-        creativeTabs.register(modEventBus);
-
-        modEventBus.addListener((RegisterCapabilitiesEvent event) -> {
-            if (!cabinetBlocks.isEmpty()) {
-                event.registerBlockEntity(Capabilities.ItemHandler.BLOCK,
-                        cabinetBlockEntityType.get(), (be, ctx) -> new InvWrapper(be));
-            }
-        });
-
-        modEventBus.addListener((net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent event) ->
-            event.enqueueWork(() -> cabinetBlocks.forEach(s -> {
-                if (s.get() instanceof DelightCabinetBlock cab) cab.setBlockEntityType(cabinetBlockEntityType);
-            }))
-        );
-
-        modEventBus.addListener((GatherDataEvent event) ->
-            event.getGenerator().addProvider(true,
-                    new DelightDataGenerator(event.getGenerator().getPackOutput(), this))
-        );
-    }
 
     private static String toTitleCase(String name) {
         String[] words = name.split("_");

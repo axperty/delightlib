@@ -1,6 +1,6 @@
 package com.axperty.delightlib.internal;
 
-import com.mojang.serialization.MapCodec;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -23,12 +23,12 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.function.Supplier;
 
 @SuppressWarnings("deprecation")
 public class DelightCabinetBlock extends BaseEntityBlock {
-    public static final MapCodec<DelightCabinetBlock> CODEC = simpleCodec(DelightCabinetBlock::new);
+
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 
@@ -43,10 +43,9 @@ public class DelightCabinetBlock extends BaseEntityBlock {
         this.blockEntityType = type;
     }
 
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() { return CODEC; }
 
-    @Override
+
+
     public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (level.isClientSide) return InteractionResult.SUCCESS;
         if (level.getBlockEntity(pos) instanceof DelightCabinetBlockEntity cabinet) {

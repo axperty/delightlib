@@ -48,12 +48,16 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
     // Fabric-ASM
-    modImplementation("com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}") {
+    modCompileOnly("com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
+    modLocalRuntime("com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
     port_lib_modules.split(",").each {
-        modImplementation "io.github.fabricators_of_create.Porting-Lib:${it}:${port_lib_version}"
+        modCompileOnly "io.github.fabricators_of_create.Porting-Lib:${it}:${port_lib_version}"
+        modLocalRuntime "io.github.fabricators_of_create.Porting-Lib:${it}:${port_lib_version}"
     }
 
     modImplementation "curse.maven:farmers-delight-refabricated-993166:7199661"

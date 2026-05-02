@@ -15,23 +15,6 @@ repositories {
     maven {
         url = "https://www.cursemaven.com"
     }
-    maven { url = "https://mvn.devos.one/snapshots/" } // Porting Lib Snapshots
-    maven { url = "https://mvn.devos.one/releases/" }  // Porting Lib Releases
-    exclusiveContent {
-        forRepository {
-            maven { url = "https://jitpack.io" }
-        }
-        filter {
-            includeGroup "com.github.Chocohead"
-        }
-    }
-    maven {
-        url "https://maven.jamieswhiteshirt.com/libs-release" // Reach Entity Attributes (Porting Lib dep)
-        content {
-            includeGroup "com.jamieswhiteshirt"
-        }
-    }
-    mavenCentral()
 }
 
 dependencies {
@@ -46,19 +29,6 @@ dependencies {
 
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-
-    // Fabric-ASM
-    modCompileOnly("com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}") {
-        exclude(group: "net.fabricmc.fabric-api")
-    }
-    modLocalRuntime("com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}") {
-        exclude(group: "net.fabricmc.fabric-api")
-    }
-
-    port_lib_modules.split(",").each {
-        modCompileOnly "io.github.fabricators_of_create.Porting-Lib:${it}:${port_lib_version}"
-        modLocalRuntime "io.github.fabricators_of_create.Porting-Lib:${it}:${port_lib_version}"
-    }
 
     modImplementation "curse.maven:farmers-delight-refabricated-993166:7199661"
 }

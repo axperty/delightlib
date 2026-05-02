@@ -16,6 +16,23 @@ repositories {
         url = "https://www.cursemaven.com"
         allowInsecureProtocol = true
     }
+    maven { url = "https://mvn.devos.one/snapshots/" } // Porting Lib Snapshots
+    maven { url = "https://mvn.devos.one/releases/" }  // Porting Lib Releases
+    exclusiveContent {
+        forRepository {
+            maven { url = "https://jitpack.io" }
+        }
+        filter {
+            includeGroup "com.github.Chocohead"
+        }
+    }
+    maven {
+        url "https://maven.jamieswhiteshirt.com/libs-release" // Reach Entity Attributes (Porting Lib dep)
+        content {
+            includeGroup "com.jamieswhiteshirt"
+        }
+    }
+    mavenCentral()
 }
 
 dependencies {
@@ -30,6 +47,18 @@ dependencies {
 
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+    // Fabric-ASM / ClassTinkerers (required by Porting Lib)
+    include(modImplementation("com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}")) {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
+
+    // Porting Lib modules (required by Farmer's Delight Refabricated)
+    for (String module in port_lib_modules.split(",")) {
+        include(modApi("io.github.fabricators_of_create.Porting-Lib:$module:$port_lib_version"))
+    }
+
+    // Farmer's Delight Refabricated
     modImplementation "curse.maven:farmers-delight-refabricated-993166:7199661"
 }
 

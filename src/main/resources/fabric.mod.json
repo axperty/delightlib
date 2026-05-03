@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "delightlib",
-  "version": "26.05.02-1.20-fabric",
+  "version": "26.05.03-1.20-fabric",
   "name": "Delight Lib",
   "description": "A library mod for Farmer's Delight that aims to make other add-ons easily.",
   "authors": [

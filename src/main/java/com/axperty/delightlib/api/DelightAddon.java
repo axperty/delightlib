@@ -49,6 +49,7 @@ public class DelightAddon {
     private final Map<String, String> itemModelParents = new LinkedHashMap<>();
     private final Map<String, String> langEntries = new LinkedHashMap<>();
     private final List<CropInfo> cropInfos = new ArrayList<>();
+    private final List<PlaceableFoodInfo> placeableFoodInfos = new ArrayList<>();
 
     private DelightAddon(String modId, IEventBus modEventBus) {
         this.modId = modId;
@@ -109,9 +110,11 @@ public class DelightAddon {
         langEntries.put("container." + modId + "." + name, toTitleCase(name));
     }
 
-    public void trackPlaceableFood(String name) {
+    public void trackPlaceableFood(String name, boolean isPie) {
+        placeableFoodInfos.add(new PlaceableFoodInfo(name, isPie));
         blockNames.add(name);
         langEntries.put("block." + modId + "." + name, toTitleCase(name));
+        langEntries.put("item." + modId + "." + name, toTitleCase(name));
     }
 
     public void trackCrate(String name) {
@@ -177,6 +180,7 @@ public class DelightAddon {
     public Map<String, String> getLangEntries() { return Collections.unmodifiableMap(langEntries); }
     public Map<String, JsonObject> getRecipes() { return Collections.unmodifiableMap(recipes); }
     public List<CropInfo> getCropInfos() { return Collections.unmodifiableList(cropInfos); }
+    public List<PlaceableFoodInfo> getPlaceableFoodInfos() { return Collections.unmodifiableList(placeableFoodInfos); }
 
     // Internal
 

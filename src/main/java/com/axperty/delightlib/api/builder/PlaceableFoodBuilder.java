@@ -52,7 +52,7 @@ public class PlaceableFoodBuilder {
         if (!isPie && !isFeast) {
             throw new IllegalStateException("PlaceableFoodBuilder '" + name + "' must use .asPie() or .asFeast()");
         }
-        addon.trackPlaceableFood(name);
+        addon.trackPlaceableFood(name, isPie);
         final int stack = maxStackSize;
 
         Supplier<Block> block;

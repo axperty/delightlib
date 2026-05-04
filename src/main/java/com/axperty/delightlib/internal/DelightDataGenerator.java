@@ -350,7 +350,10 @@ public class DelightDataGenerator implements DataProvider {
 
             // Item model
             JsonObject item = new JsonObject();
-            item.addProperty("parent", modId + ":block/" + food.name());
+            item.addProperty("parent", "minecraft:item/generated");
+            JsonObject tex = new JsonObject();
+            tex.addProperty("layer0", modId + ":item/" + food.name());
+            item.add("textures", tex);
             futures.add(save(cache, "assets", modId, "models/item/" + food.name() + ".json", item));
         }
         return futures;

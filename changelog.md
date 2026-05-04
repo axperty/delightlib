@@ -2,14 +2,9 @@
 
 ***
 
-### ✨ What's New:
+### 🛠️ Minor Changes:
 
-- This is the first version of Delight Lib for Farmer's Delight 1.3.1, the features include:
-  - Creation of food items and placeable food items.
-  - Creation of cabinets.
-  - Creation of crates and bags.
-  - Creation of knives.
-  - Creation of crops.
+- Fixed placeable food items not generating data files. They now require the user to add all model files manually inside the `models/block` folder.
 
 - You can easily implement Delight Lib in your Farmer's Delight add-on, for a quick start guide, please [check the documentation here](https://github.com/axperty/delightlib/wiki).
 

@@ -332,62 +332,22 @@ public class DelightDataGenerator implements DataProvider {
         List<CompletableFuture<?>> futures = new ArrayList<>();
         String modId = addon.getModId();
         for (PlaceableFoodInfo food : addon.getPlaceableFoodInfos()) {
-            if (food.isPie()) {
-                // Pie blockstate
-                JsonObject bs = new JsonObject();
-                JsonObject variants = new JsonObject();
-                for (int bites = 0; bites <= 3; bites++) {
-                    JsonObject v = new JsonObject();
-                    v.addProperty("model", modId + ":block/" + food.name() + (bites == 0 ? "" : "_stage" + bites));
-                    variants.add("bites=" + bites, v);
-                }
-                bs.add("variants", variants);
-                futures.add(save(cache, "assets", modId, "blockstates/" + food.name() + ".json", bs));
-                // Block models (stage 0 to 3)
-                for (int bites = 0; bites <= 3; bites++) {
-                    String modelName = food.name() + (bites == 0 ? "" : "_stage" + bites);
-                    JsonObject m = new JsonObject();
-                    m.addProperty("parent", "farmersdelight:block/pie" + (bites == 0 ? "" : "_stage" + bites));
-                    JsonObject tex = new JsonObject();
-                    tex.addProperty("top", modId + ":block/" + food.name() + "_top");
-                    tex.addProperty("bottom", modId + ":block/" + food.name() + "_bottom");
-                    tex.addProperty("side", modId + ":block/" + food.name() + "_side");
-                    tex.addProperty("inner", modId + ":block/" + food.name() + "_inner");
-                    tex.addProperty("particle", modId + ":block/" + food.name() + "_side");
-                    m.add("textures", tex);
-                    futures.add(save(cache, "assets", modId, "models/block/" + modelName + ".json", m));
-                }
-            } else {
-                // Feast blockstate
-                JsonObject bs = new JsonObject();
-                JsonObject variants = new JsonObject();
-                String[] facings = {"north", "south", "west", "east"};
-                int[] yRots = {0, 180, 270, 90};
+            JsonObject bs = new JsonObject();
+            JsonObject variants = new JsonObject();
+            String[] facings = {"east", "north", "south", "west"};
+            int[] yRots = {90, 0, 180, 270};
+            for (int bites = 0; bites <= 3; bites++) {
                 for (int i = 0; i < facings.length; i++) {
-                    for (int servings = 0; servings <= 4; servings++) {
-                        JsonObject v = new JsonObject();
-                        // stage 0 = 4 servings, stage 1 = 3 servings, ..., stage 4 = 0 servings
-                        int stage = 4 - servings;
-                        v.addProperty("model", modId + ":block/" + food.name() + (stage == 0 ? "" : "_stage" + stage));
-                        if (yRots[i] != 0) v.addProperty("y", yRots[i]);
-                        variants.add("facing=" + facings[i] + ",servings=" + servings, v);
-                    }
-                }
-                bs.add("variants", variants);
-                futures.add(save(cache, "assets", modId, "blockstates/" + food.name() + ".json", bs));
-                // Block models (stage 0 to 4)
-                for (int stage = 0; stage <= 4; stage++) {
-                    String modelName = food.name() + (stage == 0 ? "" : "_stage" + stage);
-                    JsonObject m = new JsonObject();
-                    m.addProperty("parent", "minecraft:block/orientable");
-                    JsonObject tex = new JsonObject();
-                    tex.addProperty("top", modId + ":block/" + food.name() + "_top");
-                    tex.addProperty("front", modId + ":block/" + food.name() + (stage == 0 ? "" : "_stage" + stage));
-                    tex.addProperty("side", modId + ":block/" + food.name() + "_side");
-                    m.add("textures", tex);
-                    futures.add(save(cache, "assets", modId, "models/block/" + modelName + ".json", m));
+                    JsonObject v = new JsonObject();
+                    String modelSuffix = bites == 0 ? "" : "_stage" + bites;
+                    v.addProperty("model", modId + ":block/" + food.name() + modelSuffix);
+                    if (yRots[i] != 0) v.addProperty("y", yRots[i]);
+                    variants.add("bites=" + bites + ",facing=" + facings[i], v);
                 }
             }
+            bs.add("variants", variants);
+            futures.add(save(cache, "assets", modId, "blockstates/" + food.name() + ".json", bs));
+
             // Item model
             JsonObject item = new JsonObject();
             item.addProperty("parent", modId + ":block/" + food.name());

@@ -43,6 +43,7 @@ public class DelightAddon {
     private final Map<String, String> itemModelParents = new LinkedHashMap<>();
     private final Map<String, String> langEntries = new LinkedHashMap<>();
     private final List<CropInfo> cropInfos = new ArrayList<>();
+    private final List<PlaceableFoodInfo> placeableFoodInfos = new ArrayList<>();
     
     private CreativeModeTab tab;
     private String tabTitle;
@@ -130,9 +131,11 @@ public class DelightAddon {
         langEntries.put("container." + modId + "." + name, toTitleCase(name));
     }
 
-    public void trackPlaceableFood(String name) {
+    public void trackPlaceableFood(String name, boolean isPie) {
+        placeableFoodInfos.add(new PlaceableFoodInfo(name, isPie));
         blockNames.add(name);
         langEntries.put("block." + modId + "." + name, toTitleCase(name));
+        langEntries.put("item." + modId + "." + name, toTitleCase(name));
     }
 
     public void trackCrate(String name) {
@@ -205,6 +208,7 @@ public class DelightAddon {
     public Map<String, JsonObject> getRecipes() { return Collections.unmodifiableMap(recipes); }
     public List<CropInfo> getCropInfos() { return Collections.unmodifiableList(cropInfos); }
     public List<Supplier<Block>> getCutoutBlocks() { return Collections.unmodifiableList(cutoutBlocks); }
+    public List<PlaceableFoodInfo> getPlaceableFoodInfos() { return Collections.unmodifiableList(placeableFoodInfos); }
 
     private static String toTitleCase(String name) {
         String[] words = name.split("_");

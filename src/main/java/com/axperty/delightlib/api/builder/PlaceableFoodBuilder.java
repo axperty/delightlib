@@ -19,6 +19,7 @@ public class PlaceableFoodBuilder {
     private Supplier<Item> sliceItem;
     private boolean isFeast = false;
     private Supplier<Item> servingItem;
+    private Supplier<Item> feastOutputItem;
     private boolean hasLeftovers = true;
 
     public PlaceableFoodBuilder(DelightAddon addon, String name) {
@@ -55,13 +56,21 @@ public class PlaceableFoodBuilder {
         return feast(servingItemName, true);
     }
 
+    public PlaceableFoodBuilder feastOutput(Supplier<Item> item) {
+        this.feastOutputItem = item;
+        return this;
+    }
+    public PlaceableFoodBuilder feastOutput(String itemName) {
+        return feastOutput(addon.getItem(itemName));
+    }
+
     public PlaceableFoodBuilder stacksTo(int size) { this.maxStackSize = size; return this; }
 
     public Supplier<Item> build() {
         if (!isPie && !isFeast) {
             throw new IllegalStateException("PlaceableFoodBuilder '" + name + "' must use .pie() or .feast()");
         }
-        addon.trackPlaceableFood(name, isPie ? PlaceableFoodInfo.FoodType.PIE : PlaceableFoodInfo.FoodType.FEAST);
+        addon.trackPlaceableFood(name, isPie ? PlaceableFoodInfo.FoodType.PIE : PlaceableFoodInfo.FoodType.FEAST, sliceItem, servingItem, feastOutputItem);
         final int stack = maxStackSize;
 
         Supplier<Block> block;

@@ -110,8 +110,8 @@ public class DelightAddon {
         langEntries.put("container." + modId + "." + name, toTitleCase(name));
     }
 
-    public void trackPlaceableFood(String name, boolean isPie) {
-        placeableFoodInfos.add(new PlaceableFoodInfo(name, isPie));
+    public void trackPlaceableFood(String name, PlaceableFoodInfo.FoodType type) {
+        placeableFoodInfos.add(new PlaceableFoodInfo(name, type));
         blockNames.add(name);
         langEntries.put("block." + modId + "." + name, toTitleCase(name));
         langEntries.put("item." + modId + "." + name, toTitleCase(name));

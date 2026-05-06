@@ -4,10 +4,8 @@
 
 ### 🛠️ Minor Changes:
 
-- Fixed placeable food items not generating data files. They now require the user to add all model files manually inside the `models/block` folder.
-
-- You can easily implement Delight Lib in your Farmer's Delight add-on, for a quick start guide, please [check the documentation here](https://github.com/axperty/delightlib/wiki).
-
+- Fixed a bug where placeable foods wouldn't have a texture after being placed.
+- 
 
 ***
 

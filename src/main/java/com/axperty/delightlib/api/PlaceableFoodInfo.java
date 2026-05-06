@@ -1,6 +1,9 @@
 package com.axperty.delightlib.api;
 
-public record PlaceableFoodInfo(String name, FoodType type) {
+import net.minecraft.world.item.Item;
+import java.util.function.Supplier;
+
+public record PlaceableFoodInfo(String name, FoodType type, Supplier<Item> sliceItem, Supplier<Item> servingItem, Supplier<Item> discardItem, boolean hasLeftovers) {
     public enum FoodType {
         PIE, FEAST
     }

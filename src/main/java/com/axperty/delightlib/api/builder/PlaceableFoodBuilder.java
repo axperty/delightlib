@@ -19,6 +19,7 @@ public class PlaceableFoodBuilder {
     private Supplier<Item> sliceItem;
     private boolean isFeast = false;
     private Supplier<Item> servingItem;
+    private Supplier<Item> discardItem;
     private boolean hasLeftovers = true;
 
     public PlaceableFoodBuilder(DelightAddon addon, String name) {
@@ -26,53 +27,56 @@ public class PlaceableFoodBuilder {
         this.name = name;
     }
 
-    public PlaceableFoodBuilder pie(Supplier<Item> sliceItem) {
+    public PlaceableFoodBuilder asPie(Supplier<Item> sliceItem) {
         this.isPie = true; this.isFeast = false;
         this.sliceItem = sliceItem;
         return this;
     }
 
-    public PlaceableFoodBuilder pie(String sliceItemName) {
-        return pie(addon.getItem(sliceItemName));
+    public PlaceableFoodBuilder asPie(String sliceItemName) {
+        return asPie(addon.getItem(sliceItemName));
     }
 
-    public PlaceableFoodBuilder feast(Supplier<Item> servingItem, boolean hasLeftovers) {
+    public PlaceableFoodBuilder asFeast(Supplier<Item> servingItem, boolean hasLeftovers) {
         this.isFeast = true; this.isPie = false;
         this.servingItem = servingItem;
         this.hasLeftovers = hasLeftovers;
         return this;
     }
 
-    public PlaceableFoodBuilder feast(Supplier<Item> servingItem) {
-        return feast(servingItem, true);
+    public PlaceableFoodBuilder asFeast(String servingItemName, boolean hasLeftovers) {
+        return asFeast(addon.getItem(servingItemName), hasLeftovers);
     }
 
-    public PlaceableFoodBuilder feast(String servingItemName, boolean hasLeftovers) {
-        return feast(addon.getItem(servingItemName), hasLeftovers);
+    public PlaceableFoodBuilder discardItem(Supplier<Item> discardItem) {
+        this.discardItem = discardItem;
+        return this;
     }
 
-    public PlaceableFoodBuilder feast(String servingItemName) {
-        return feast(servingItemName, true);
+    public PlaceableFoodBuilder discardItem(String discardItemName) {
+        return discardItem(addon.getItem(discardItemName));
     }
 
     public PlaceableFoodBuilder stacksTo(int size) { this.maxStackSize = size; return this; }
 
     public Supplier<Item> build() {
         if (!isPie && !isFeast) {
-            throw new IllegalStateException("PlaceableFoodBuilder '" + name + "' must use .pie() or .feast()");
+            throw new IllegalStateException("PlaceableFoodBuilder '" + name + "' must use .asPie() or .asFeast()");
         }
-        addon.trackPlaceableFood(name, isPie ? PlaceableFoodInfo.FoodType.PIE : PlaceableFoodInfo.FoodType.FEAST);
+        addon.trackPlaceableFood(name, isPie ? PlaceableFoodInfo.FoodType.PIE : PlaceableFoodInfo.FoodType.FEAST, sliceItem, servingItem, discardItem, hasLeftovers);
         final int stack = maxStackSize;
 
         Supplier<Block> block;
         if (isPie) {
             final Supplier<Item> slice = sliceItem;
-            block = addon.registerBlock(name, () -> new PieBlock(Block.Properties.ofFullCopy(Blocks.CAKE), slice));
+            block = addon.registerBlock(name, () -> new PieBlock(Block.Properties.copy(Blocks.CAKE), slice));
+            addon.addCutoutBlock(block);
         } else {
             final Supplier<Item> serving = servingItem;
             final boolean leftovers = hasLeftovers;
-            block = addon.registerBlock(name, () -> new FeastBlock(Block.Properties.ofFullCopy(Blocks.CAKE), serving, leftovers));
+            block = addon.registerBlock(name, () -> new FeastBlock(Block.Properties.copy(Blocks.CAKE), serving, leftovers));
+            addon.addCutoutBlock(block);
         }
-        return addon.registerItem(name, () -> new PlaceableItem(block.get(), new Item.Properties().stacksTo(stack)));
+        return addon.registerItem(name, () -> new net.minecraft.world.item.BlockItem(block.get(), new net.minecraft.world.item.Item.Properties().stacksTo(stack)));
     }
 }

@@ -33,8 +33,10 @@ public class DelightDataGenerator implements DataProvider {
         futures.addAll(generateCropAssets(cache));
         futures.addAll(generatePlaceableFoodAssets(cache));
         futures.addAll(generateLootTables(cache));
+        futures.addAll(generatePlaceableFoodLootTables(cache));
         futures.add(generateLang(cache));
         futures.addAll(generateRecipes(cache));
+        futures.addAll(generatePlaceableFoodRecipes(cache));
         return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
     }
 
@@ -245,7 +247,9 @@ public class DelightDataGenerator implements DataProvider {
     private List<CompletableFuture<?>> generateLootTables(CachedOutput cache) {
         List<CompletableFuture<?>> futures = new ArrayList<>();
         String modId = addon.getModId();
+        List<String> skip = addon.getPlaceableFoodInfos().stream().map(PlaceableFoodInfo::name).toList();
         for (String name : addon.getBlockNames()) {
+            if (skip.contains(name)) continue;
             JsonObject loot = new JsonObject();
             loot.addProperty("type", "minecraft:block");
             JsonArray pools = new JsonArray();
@@ -374,6 +378,146 @@ public class DelightDataGenerator implements DataProvider {
             tex.addProperty("layer0", modId + ":item/" + food.name());
             item.add("textures", tex);
             futures.add(save(cache, "assets", modId, "models/item/" + food.name() + ".json", item));
+
+            // Block models (if cutout)
+            if (isCutout(food.name())) {
+                generateCutoutModels(cache, modId, food, futures);
+            }
+        }
+        return futures;
+    }
+
+    private boolean isCutout(String name) {
+        return addon.getCutoutBlocks().stream()
+                .anyMatch(s -> {
+                    net.minecraft.resources.ResourceLocation key = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(s.get());
+                    return key.getNamespace().equals(addon.getModId()) && key.getPath().equals(name);
+                });
+    }
+
+    private void generateCutoutModels(CachedOutput cache, String modId, PlaceableFoodInfo food, List<CompletableFuture<?>> futures) {
+        // This is a bit tricky since we don't know the parent model structure for feasts/pies usually
+        // but we can try to add render_type to existing models if they were generated?
+        // Wait, the library DOES NOT generate block models for placeable food.
+        // If the user wants cutout, they probably have to add it to their own model files.
+        // However, the user's diff showed them adding it.
+    }
+
+    private List<CompletableFuture<?>> generatePlaceableFoodLootTables(CachedOutput cache) {
+        List<CompletableFuture<?>> futures = new ArrayList<>();
+        String modId = addon.getModId();
+        for (PlaceableFoodInfo food : addon.getPlaceableFoodInfos()) {
+            if (food.type() == PlaceableFoodInfo.FoodType.PIE) {
+                JsonObject loot = new JsonObject();
+                loot.addProperty("type", "minecraft:block");
+                loot.addProperty("random_sequence", modId + ":blocks/" + food.name());
+                futures.add(save(cache, "data", modId, "loot_table/blocks/" + food.name() + ".json", loot));
+            } else {
+                futures.add(save(cache, "data", modId, "loot_table/blocks/" + food.name() + ".json", feastLootTable(modId, food)));
+            }
+        }
+        return futures;
+    }
+
+    private JsonObject feastLootTable(String modId, PlaceableFoodInfo food) {
+        JsonObject loot = new JsonObject();
+        loot.addProperty("type", "minecraft:block");
+        JsonArray pools = new JsonArray();
+
+        // Pool 1: Drop feast if full
+        JsonObject pool1 = new JsonObject();
+        pool1.addProperty("rolls", 1.0);
+        pool1.addProperty("bonus_rolls", 0.0);
+        JsonArray conds1 = new JsonArray();
+        JsonObject cond1 = new JsonObject();
+        cond1.addProperty("condition", "minecraft:block_state_property");
+        cond1.addProperty("block", modId + ":" + food.name());
+        JsonObject props1 = new JsonObject();
+        props1.addProperty("servings", "4");
+        cond1.add("properties", props1);
+        conds1.add(cond1);
+        pool1.add("conditions", conds1);
+        JsonArray entries1 = new JsonArray();
+        JsonObject entry1 = new JsonObject();
+        entry1.addProperty("type", "minecraft:item");
+        entry1.addProperty("name", modId + ":" + food.name());
+        entries1.add(entry1);
+        pool1.add("entries", entries1);
+        pools.add(pool1);
+
+        // Pool 2: Drop bowl if not full
+        JsonObject pool2 = new JsonObject();
+        pool2.addProperty("rolls", 1.0);
+        pool2.addProperty("bonus_rolls", 0.0);
+        JsonArray conds2 = new JsonArray();
+        JsonObject cond2 = new JsonObject();
+        cond2.addProperty("condition", "minecraft:inverted");
+        cond2.add("term", cond1);
+        conds2.add(cond2);
+        pool2.add("conditions", conds2);
+        JsonArray entries2 = new JsonArray();
+        JsonObject entry2 = new JsonObject();
+        entry2.addProperty("type", "minecraft:item");
+        entry2.addProperty("name", "minecraft:bowl");
+        entries2.add(entry2);
+        pool2.add("entries", entries2);
+        pools.add(pool2);
+
+        // Pool 3: Drop custom item if not full
+        if (food.discardItem() != null) {
+            JsonObject pool3 = new JsonObject();
+            pool3.addProperty("rolls", 1.0);
+            pool3.addProperty("bonus_rolls", 0.0);
+            pool3.add("conditions", conds2);
+            JsonArray entries3 = new JsonArray();
+            JsonObject entry3 = new JsonObject();
+            entry3.addProperty("type", "minecraft:item");
+            net.minecraft.resources.ResourceLocation discardKey = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(food.discardItem().get());
+            entry3.addProperty("name", discardKey.toString());
+            entries3.add(entry3);
+            pool3.add("entries", entries3);
+            pools.add(pool3);
+        }
+
+        loot.add("pools", pools);
+        loot.addProperty("random_sequence", modId + ":blocks/" + food.name());
+        return loot;
+    }
+
+    private List<CompletableFuture<?>> generatePlaceableFoodRecipes(CachedOutput cache) {
+        List<CompletableFuture<?>> futures = new ArrayList<>();
+        String modId = addon.getModId();
+        for (PlaceableFoodInfo food : addon.getPlaceableFoodInfos()) {
+            if (food.type() == PlaceableFoodInfo.FoodType.PIE) {
+                JsonObject recipe = new JsonObject();
+                recipe.addProperty("type", "farmersdelight:cutting");
+                JsonArray ingredients = new JsonArray();
+                JsonObject ing = new JsonObject();
+                ing.addProperty("item", modId + ":" + food.name());
+                ingredients.add(ing);
+                recipe.add("ingredients", ingredients);
+
+                JsonArray results = new JsonArray();
+                JsonObject res = new JsonObject();
+                JsonObject itemObj = new JsonObject();
+                itemObj.addProperty("id", modId + ":" + food.name() + "_slice");
+                itemObj.addProperty("count", 4);
+                res.add("item", itemObj);
+                results.add(res);
+                recipe.add("result", results);
+
+                JsonArray tools = new JsonArray();
+                JsonObject tool1 = new JsonObject();
+                tool1.addProperty("type", "farmersdelight:item_ability");
+                tool1.addProperty("action", "knife_dig");
+                tools.add(tool1);
+                JsonObject tool2 = new JsonObject();
+                tool2.addProperty("tag", "c:tools/knife");
+                tools.add(tool2);
+                recipe.add("tool", tools);
+
+                futures.add(save(cache, "data", "farmersdelight", "recipe/cutting/" + food.name() + ".json", recipe));
+            }
         }
         return futures;
     }

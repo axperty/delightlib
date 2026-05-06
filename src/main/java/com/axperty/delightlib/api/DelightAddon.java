@@ -50,6 +50,7 @@ public class DelightAddon {
     private final Map<String, String> langEntries = new LinkedHashMap<>();
     private final List<CropInfo> cropInfos = new ArrayList<>();
     private final List<PlaceableFoodInfo> placeableFoodInfos = new ArrayList<>();
+    private final List<Supplier<Block>> cutoutBlocks = new ArrayList<>();
 
     private DelightAddon(String modId, IEventBus modEventBus) {
         this.modId = modId;
@@ -110,8 +111,8 @@ public class DelightAddon {
         langEntries.put("container." + modId + "." + name, toTitleCase(name));
     }
 
-    public void trackPlaceableFood(String name, PlaceableFoodInfo.FoodType type) {
-        placeableFoodInfos.add(new PlaceableFoodInfo(name, type));
+    public void trackPlaceableFood(String name, PlaceableFoodInfo.FoodType type, Supplier<Item> sliceItem, Supplier<Item> servingItem, Supplier<Item> discardItem, boolean hasLeftovers) {
+        placeableFoodInfos.add(new PlaceableFoodInfo(name, type, sliceItem, servingItem, discardItem, hasLeftovers));
         blockNames.add(name);
         langEntries.put("block." + modId + "." + name, toTitleCase(name));
         langEntries.put("item." + modId + "." + name, toTitleCase(name));
@@ -166,6 +167,14 @@ public class DelightAddon {
 
     public void addRecipe(String path, JsonObject json) {
         recipes.put(path, json);
+    }
+
+    public void addCutoutBlock(Supplier<Block> block) {
+        cutoutBlocks.add(block);
+    }
+    
+    public List<Supplier<Block>> getCutoutBlocks() {
+        return Collections.unmodifiableList(cutoutBlocks);
     }
 
     // Getters

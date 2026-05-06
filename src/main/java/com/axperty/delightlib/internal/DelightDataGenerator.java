@@ -400,7 +400,7 @@ public class DelightDataGenerator implements DataProvider {
                 JsonObject loot = new JsonObject();
                 loot.addProperty("type", "minecraft:block");
                 loot.addProperty("random_sequence", modId + ":blocks/" + food.name());
-                futures.add(save(cache, "data", modId, "loot_table/blocks/" + food.name() + ".json", loot));
+                futures.add(save(cache, "data", modId, "loot_tables/blocks/" + food.name() + ".json", loot));
                 // Pie cutting recipe
                 JsonObject recipe = new JsonObject();
                 recipe.addProperty("type", "farmersdelight:cutting");
@@ -489,7 +489,7 @@ public class DelightDataGenerator implements DataProvider {
                 pool3.add("entries", entries3);
                 pools.add(pool3);
                 loot.add("pools", pools);
-                futures.add(save(cache, "data", modId, "loot_table/blocks/" + food.name() + ".json", loot));
+                futures.add(save(cache, "data", modId, "loot_tables/blocks/" + food.name() + ".json", loot));
             }
         }
         return futures;

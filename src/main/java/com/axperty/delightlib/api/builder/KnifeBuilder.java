@@ -27,14 +27,13 @@ public class KnifeBuilder {
 
     public Supplier<Item> build() {
         addon.trackKnife(name);
-        final float ad = attackDamage, as = attackSpeed;
         final boolean fr = fireResistant;
         final Tier t = tier;
 
         return addon.registerItem(name, () -> {
             Item.Properties props = new Item.Properties();
             if (fr) props = props.fireResistant();
-            return new KnifeItem(t, ad, as, props);
+            return new KnifeItem(t, props);
         });
     }
 }

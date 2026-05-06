@@ -37,7 +37,7 @@ public class CabinetBuilder {
         final int fuel = burnTime;
 
         Supplier<Block> block = addon.registerBlock(name, () -> {
-            Block.Properties props = Block.Properties.copy(Blocks.BARREL);
+            Block.Properties props = Block.Properties.ofFullCopy(Blocks.BARREL);
             if (sound != null) props = props.sound(sound);
             return new DelightCabinetBlock(props);
         });

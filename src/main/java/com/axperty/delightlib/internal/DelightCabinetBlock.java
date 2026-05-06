@@ -1,6 +1,6 @@
 package com.axperty.delightlib.internal;
 
-
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -44,11 +44,18 @@ public class DelightCabinetBlock extends BaseEntityBlock {
         this.blockEntityType = type;
     }
 
+    public static final MapCodec<DelightCabinetBlock> CODEC = simpleCodec(DelightCabinetBlock::new);
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
+    }
+
 
 
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (level.isClientSide) return InteractionResult.SUCCESS;
         if (level.getBlockEntity(pos) instanceof DelightCabinetBlockEntity cabinet) {
             player.openMenu(cabinet);

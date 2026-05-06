@@ -67,7 +67,7 @@ public class DelightAddon {
 
     public void build() {
         if (tabTitle != null) {
-            tab = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, new ResourceLocation(modId, "tab"), 
+            tab = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, ResourceLocation.fromNamespaceAndPath(modId, "tab"), 
                 FabricItemGroup.builder()
                     .title(Component.literal(tabTitle))
                     .icon(tabIcon)
@@ -81,7 +81,7 @@ public class DelightAddon {
             
             BlockEntityType<DelightCabinetBlockEntity> type = Registry.register(
                 BuiltInRegistries.BLOCK_ENTITY_TYPE,
-                new ResourceLocation(modId, "cabinet"),
+                ResourceLocation.fromNamespaceAndPath(modId, "cabinet"),
                 FabricBlockEntityTypeBuilder.create((pos, state) -> new DelightCabinetBlockEntity(cabinetBlockEntityType.get(), pos, state), valid).build(null)
             );
             
@@ -164,22 +164,22 @@ public class DelightAddon {
     // Registry helpers
 
     public Supplier<Item> registerItem(String name, Supplier<Item> supplier) {
-        Item item = Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(modId, name), supplier.get());
+        Item item = Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(modId, name), supplier.get());
         Supplier<Item> registered = () -> item;
         creativeTabItems.add(registered);
         return registered;
     }
 
     public Supplier<Block> registerBlock(String name, Supplier<Block> supplier) {
-        Block block = Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(modId, name), supplier.get());
+        Block block = Registry.register(BuiltInRegistries.BLOCK, ResourceLocation.fromNamespaceAndPath(modId, name), supplier.get());
         return () -> block;
     }
 
     public Supplier<Item> getItem(String name) {
         if (name.contains(":")) {
-            return () -> BuiltInRegistries.ITEM.get(new ResourceLocation(name));
+            return () -> BuiltInRegistries.ITEM.get(ResourceLocation.parse(name));
         } else {
-            return () -> BuiltInRegistries.ITEM.get(new ResourceLocation(modId, name));
+            return () -> BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(modId, name));
         }
     }
 

@@ -51,16 +51,16 @@ public class DelightCabinetBlockEntity extends RandomizableContainerBlockEntity 
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-        if (!trySaveLootTable(tag)) ContainerHelper.saveAllItems(tag, contents);
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
+        if (!trySaveLootTable(tag)) ContainerHelper.saveAllItems(tag, contents, registries);
     }
 
     @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
         contents = NonNullList.withSize(getContainerSize(), ItemStack.EMPTY);
-        if (!tryLoadLootTable(tag)) ContainerHelper.loadAllItems(tag, contents);
+        if (!tryLoadLootTable(tag)) ContainerHelper.loadAllItems(tag, contents, registries);
     }
 
     @Override public int getContainerSize() { return 27; }

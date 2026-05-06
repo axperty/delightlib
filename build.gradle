@@ -1,57 +1,15 @@
 plugins {
-    id 'fabric-loom' version '1.7-SNAPSHOT'
+    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
     id 'maven-publish'
 }
 
 version = project.mod_version
 group = project.maven_group
 
-base {
-    archivesName = project.archives_base_name
-}
-
 repositories {
     maven { url "https://maven.parchmentmc.org" }
-
-    maven {
-        url = "https://www.cursemaven.com"
-        allowInsecureProtocol = true
-    }
-
-    maven {
-        url "https://maven.firstdarkdev.xyz/snapshots"
-    }
-
-    maven {
-        name = 'Ladysnake Mods'
-        url = 'https://maven.ladysnake.org/releases'
-    }
-
-    maven {
-        url = "https://api.modrinth.com/maven"
-    }
-
-    maven { url = "https://maven.fabricmc.net/" } // FAPI, Loader
-    maven { url = "https://mvn.devos.one/snapshots/" } // Porting Lib Betas
-    maven { url = "https://mvn.devos.one/releases/" } // Porting Lib
-    exclusiveContent {
-        forRepository {
-            maven {
-                url = "https://jitpack.io"
-            }
-        }
-        filter {
-            includeGroup "com.github.Chocohead"
-        }
-    }
-    maven {
-        url "https://maven.jamieswhiteshirt.com/libs-release" // Reach Entity Attributes (Required by Porting Lib)
-        content {
-            includeGroup "com.jamieswhiteshirt"
-        }
-    }
-    mavenCentral() // Mixin Extras
-    mavenLocal() // Porting Lib (temporary)
+    maven { url "https://cursemaven.com" }
+    maven { url "https://maven.fabricmc.net/" }
 }
 
 dependencies {
@@ -66,16 +24,7 @@ dependencies {
 
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-
-    include(modImplementation("com.github.Chocohead:Fabric-ASM:${fabric_asm_version}")) {
-        exclude (group: "net.fabricmc.fabric-api")
-    }\
-
-    for (String module in port_lib_modules.split(",")) {
-        include(modApi("io.github.fabricators_of_create.Porting-Lib:$module:$port_lib_version"))
-    }
-
-    modImplementation "curse.maven:farmers-delight-refabricated-993166:7199661"
+    modImplementation "curse.maven:farmers-delight-refabricated-993166:7919003"
 }
 
 processResources {
@@ -88,29 +37,38 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 17
+    it.options.release = 21
 }
 
 java {
     withSourcesJar()
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {
     def projectName = project.name
-    inputs.property "delightlib", projectName
+    inputs.property "projectName", projectName
 
     from("LICENSE") {
         rename { "${it}_$projectName"}
     }
 }
 
+// configure the maven publication
 publishing {
     publications {
         create("mavenJava", MavenPublication) {
             from components.java
         }
     }
-    repositories {}
+
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    repositories {
+        // Add repositories to publish to here.
+        // Notice: This block does NOT have the same function as the block in the top level.
+        // The repositories here will be used for publishing your artifact, not for
+        // retrieving dependencies.
+    }
 }

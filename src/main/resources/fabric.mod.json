@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "delightlib",
-  "version": "26.05.03a-1.20-fabric",
+  "version": "${version}",
   "name": "Delight Lib",
   "description": "A library mod for Farmer's Delight that aims to make other add-ons easily.",
   "authors": [
@@ -16,18 +16,16 @@
   "entrypoints": {
     "main": [
       "com.axperty.delightlib.DelightLib"
+    ],
+    "client": [
+      "com.axperty.delightlib.DelightLibClient"
     ]
   },
   "depends": {
     "fabricloader": ">=0.19.2",
-    "minecraft": "~1.20.1",
-    "java": ">=17",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
     "fabric-api": "*",
     "farmersdelight": "*"
-  },
-  "suggests": {
-    "expandeddelight": "*",
-    "casualness_delight": "*",
-    "corndelight": "*"
   }
 }

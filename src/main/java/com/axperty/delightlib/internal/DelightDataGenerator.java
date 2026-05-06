@@ -32,6 +32,7 @@ public class DelightDataGenerator implements DataProvider {
         futures.addAll(generateCrateAndBagAssets(cache));
         futures.addAll(generateCropAssets(cache));
         futures.addAll(generatePlaceableFoodAssets(cache));
+        futures.addAll(generatePlaceableFoodData(cache));
         futures.addAll(generateLootTables(cache));
         futures.add(generateLang(cache));
         futures.addAll(generateRecipes(cache));
@@ -246,6 +247,8 @@ public class DelightDataGenerator implements DataProvider {
         List<CompletableFuture<?>> futures = new ArrayList<>();
         String modId = addon.getModId();
         for (String name : addon.getBlockNames()) {
+            boolean isPlaceableFood = addon.getPlaceableFoodInfos().stream().anyMatch(f -> f.name().equals(name));
+            if (isPlaceableFood) continue;
             JsonObject loot = new JsonObject();
             loot.addProperty("type", "minecraft:block");
             JsonArray pools = new JsonArray();
@@ -386,5 +389,109 @@ public class DelightDataGenerator implements DataProvider {
         variants.add("", v);
         bs.add("variants", variants);
         return bs;
+    }
+
+    private List<CompletableFuture<?>> generatePlaceableFoodData(CachedOutput cache) {
+        List<CompletableFuture<?>> futures = new ArrayList<>();
+        String modId = addon.getModId();
+        for (PlaceableFoodInfo food : addon.getPlaceableFoodInfos()) {
+            if (food.type() == PlaceableFoodInfo.FoodType.PIE) {
+                // Pie loot table
+                JsonObject loot = new JsonObject();
+                loot.addProperty("type", "minecraft:block");
+                loot.addProperty("random_sequence", modId + ":blocks/" + food.name());
+                futures.add(save(cache, "data", modId, "loot_table/blocks/" + food.name() + ".json", loot));
+                // Pie cutting recipe
+                JsonObject recipe = new JsonObject();
+                recipe.addProperty("type", "farmersdelight:cutting");
+                JsonArray ingredients = new JsonArray();
+                JsonObject ing = new JsonObject();
+                ing.addProperty("item", modId + ":" + food.name());
+                ingredients.add(ing);
+                recipe.add("ingredients", ingredients);
+                JsonArray result = new JsonArray();
+                JsonObject res = new JsonObject();
+                JsonObject resItem = new JsonObject();
+                resItem.addProperty("count", 4);
+                String sliceId = food.sliceItem() != null ?
+                        net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(food.sliceItem().get()).toString() :
+                        modId + ":" + food.name() + "_slice";
+                resItem.addProperty("id", sliceId);
+                res.add("item", resItem);
+                result.add(res);
+                recipe.add("result", result);
+                JsonArray tools = new JsonArray();
+                JsonObject tool1 = new JsonObject();
+                tool1.addProperty("type", "farmersdelight:item_ability");
+                tool1.addProperty("action", "knife_dig");
+                tools.add(tool1);
+                JsonObject tool2 = new JsonObject();
+                tool2.addProperty("tag", "c:tools/knife");
+                tools.add(tool2);
+                recipe.add("tool", tools);
+                futures.add(save(cache, "data", "farmersdelight", "recipe/cutting/" + food.name() + ".json", recipe));
+            } else {
+                // Feast loot table
+                JsonObject loot = new JsonObject();
+                loot.addProperty("type", "minecraft:block");
+                loot.addProperty("random_sequence", modId + ":blocks/" + food.name());
+                JsonArray pools = new JsonArray();
+                // Pool 1: Block itself if servings == 4
+                JsonObject pool1 = new JsonObject();
+                pool1.addProperty("rolls", 1.0);
+                pool1.addProperty("bonus_rolls", 0.0);
+                JsonArray conds1 = new JsonArray();
+                JsonObject cond1 = new JsonObject();
+                cond1.addProperty("condition", "minecraft:block_state_property");
+                cond1.addProperty("block", modId + ":" + food.name());
+                JsonObject props1 = new JsonObject();
+                props1.addProperty("servings", "4");
+                cond1.add("properties", props1);
+                conds1.add(cond1);
+                pool1.add("conditions", conds1);
+                JsonArray entries1 = new JsonArray();
+                JsonObject entry1 = new JsonObject();
+                entry1.addProperty("type", "minecraft:item");
+                entry1.addProperty("name", modId + ":" + food.name());
+                entries1.add(entry1);
+                pool1.add("entries", entries1);
+                pools.add(pool1);
+                // Pool 2: Bowl if servings != 4
+                JsonObject pool2 = new JsonObject();
+                pool2.addProperty("rolls", 1.0);
+                pool2.addProperty("bonus_rolls", 0.0);
+                JsonArray conds2 = new JsonArray();
+                JsonObject inverted2 = new JsonObject();
+                inverted2.addProperty("condition", "minecraft:inverted");
+                inverted2.add("term", cond1);
+                conds2.add(inverted2);
+                pool2.add("conditions", conds2);
+                JsonArray entries2 = new JsonArray();
+                JsonObject entry2 = new JsonObject();
+                entry2.addProperty("type", "minecraft:item");
+                entry2.addProperty("name", "minecraft:bowl");
+                entries2.add(entry2);
+                pool2.add("entries", entries2);
+                pools.add(pool2);
+                // Pool 3: Custom output item if servings != 4
+                JsonObject pool3 = new JsonObject();
+                pool3.addProperty("rolls", 1.0);
+                pool3.addProperty("bonus_rolls", 0.0);
+                pool3.add("conditions", conds2); // reuse inverted condition
+                JsonArray entries3 = new JsonArray();
+                JsonObject entry3 = new JsonObject();
+                entry3.addProperty("type", "minecraft:item");
+                String outputItemId = food.feastOutputItem() != null ?
+                        net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(food.feastOutputItem().get()).toString() :
+                        (food.servingItem() != null ? net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(food.servingItem().get()).toString() : "minecraft:air");
+                entry3.addProperty("name", outputItemId);
+                entries3.add(entry3);
+                pool3.add("entries", entries3);
+                pools.add(pool3);
+                loot.add("pools", pools);
+                futures.add(save(cache, "data", modId, "loot_table/blocks/" + food.name() + ".json", loot));
+            }
+        }
+        return futures;
     }
 }

@@ -336,15 +336,34 @@ public class DelightDataGenerator implements DataProvider {
             JsonObject variants = new JsonObject();
             String[] facings = {"east", "north", "south", "west"};
             int[] yRots = {90, 0, 180, 270};
-            for (int bites = 0; bites <= 3; bites++) {
-                for (int i = 0; i < facings.length; i++) {
-                    JsonObject v = new JsonObject();
-                    String modelSuffix = bites == 0 ? "" : "_stage" + bites;
-                    v.addProperty("model", modId + ":block/" + food.name() + modelSuffix);
-                    if (yRots[i] != 0) v.addProperty("y", yRots[i]);
-                    variants.add("bites=" + bites + ",facing=" + facings[i], v);
+
+            if (food.type() == PlaceableFoodInfo.FoodType.PIE) {
+                for (int bites = 0; bites <= 3; bites++) {
+                    for (int i = 0; i < facings.length; i++) {
+                        JsonObject v = new JsonObject();
+                        String modelSuffix = bites == 0 ? "" : "_slice" + bites;
+                        v.addProperty("model", modId + ":block/" + food.name() + modelSuffix);
+                        if (yRots[i] != 0) v.addProperty("y", yRots[i]);
+                        variants.add("bites=" + bites + ",facing=" + facings[i], v);
+                    }
+                }
+            } else {
+                for (int servings = 0; servings <= 4; servings++) {
+                    for (int i = 0; i < facings.length; i++) {
+                        JsonObject v = new JsonObject();
+                        String modelSuffix;
+                        if (servings == 0) {
+                            modelSuffix = "_leftovers";
+                        } else {
+                            modelSuffix = "_stage" + (4 - servings);
+                        }
+                        v.addProperty("model", modId + ":block/" + food.name() + modelSuffix);
+                        if (yRots[i] != 0) v.addProperty("y", yRots[i]);
+                        variants.add("facing=" + facings[i] + ",servings=" + servings, v);
+                    }
                 }
             }
+
             bs.add("variants", variants);
             futures.add(save(cache, "assets", modId, "blockstates/" + food.name() + ".json", bs));
 

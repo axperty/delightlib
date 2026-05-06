@@ -1,6 +1,7 @@
 package com.axperty.delightlib.api.builder;
 
 import com.axperty.delightlib.api.DelightAddon;
+import com.axperty.delightlib.api.PlaceableFoodInfo;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -25,34 +26,41 @@ public class PlaceableFoodBuilder {
         this.name = name;
     }
 
-    public PlaceableFoodBuilder asPie(Supplier<Item> sliceItem) {
+    public PlaceableFoodBuilder pie(Supplier<Item> sliceItem) {
         this.isPie = true; this.isFeast = false;
         this.sliceItem = sliceItem;
         return this;
     }
 
-    public PlaceableFoodBuilder asPie(String sliceItemName) {
-        return asPie(addon.getItem(sliceItemName));
+    public PlaceableFoodBuilder pie(String sliceItemName) {
+        return pie(addon.getItem(sliceItemName));
     }
 
-    public PlaceableFoodBuilder asFeast(Supplier<Item> servingItem, boolean hasLeftovers) {
+    public PlaceableFoodBuilder feast(Supplier<Item> servingItem, boolean hasLeftovers) {
         this.isFeast = true; this.isPie = false;
         this.servingItem = servingItem;
         this.hasLeftovers = hasLeftovers;
         return this;
     }
 
-    public PlaceableFoodBuilder asFeast(String servingItemName, boolean hasLeftovers) {
-        return asFeast(addon.getItem(servingItemName), hasLeftovers);
+    public PlaceableFoodBuilder feast(Supplier<Item> servingItem) {
+        return feast(servingItem, true);
+    }
+
+    public PlaceableFoodBuilder feast(String servingItemName, boolean hasLeftovers) {
+        return feast(addon.getItem(servingItemName), hasLeftovers);
+    }
+    public PlaceableFoodBuilder feast(String servingItemName) {
+        return feast(servingItemName, true);
     }
 
     public PlaceableFoodBuilder stacksTo(int size) { this.maxStackSize = size; return this; }
 
     public Supplier<Item> build() {
         if (!isPie && !isFeast) {
-            throw new IllegalStateException("PlaceableFoodBuilder '" + name + "' must use .asPie() or .asFeast()");
+            throw new IllegalStateException("PlaceableFoodBuilder '" + name + "' must use .pie() or .feast()");
         }
-        addon.trackPlaceableFood(name, isPie);
+        addon.trackPlaceableFood(name, isPie ? PlaceableFoodInfo.FoodType.PIE : PlaceableFoodInfo.FoodType.FEAST);
         final int stack = maxStackSize;
 
         Supplier<Block> block;

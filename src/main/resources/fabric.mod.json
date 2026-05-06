@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "id": "delightlib",
-  "version": "${version}",
+  "id": "${mod_id}",
+  "version": "${mod_version}",
   "name": "Delight Lib",
   "description": "A library mod for Farmer's Delight that aims to make other add-ons easily.",
   "authors": [

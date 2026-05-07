@@ -166,7 +166,7 @@ public class DelightDataGenerator implements DataProvider {
             }
 
             // Crop loot table
-            futures.add(save(cache, "data", modId, "loot_table/blocks/" + crop.blockName() + ".json",
+            futures.add(save(cache, "data", modId, "loot_tables/blocks/" + crop.blockName() + ".json",
                     cropLootTable(modId, crop)));
         }
         return futures;
@@ -267,7 +267,7 @@ public class DelightDataGenerator implements DataProvider {
             pool.add("conditions", conds);
             pools.add(pool);
             loot.add("pools", pools);
-            futures.add(save(cache, "data", modId, "loot_table/blocks/" + name + ".json", loot));
+            futures.add(save(cache, "data", modId, "loot_tables/blocks/" + name + ".json", loot));
         }
         return futures;
     }

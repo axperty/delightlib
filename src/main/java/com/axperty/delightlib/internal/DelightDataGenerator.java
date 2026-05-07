@@ -52,12 +52,14 @@ public class DelightDataGenerator implements DataProvider {
         if (!addon.getCabinetNames().isEmpty()) {
             futures.add(saveTag(cache, "farmersdelight", "block", "cabinets", addon.getCabinetNames(), modId));
             futures.add(saveTag(cache, "farmersdelight", "item", "cabinets", addon.getCabinetNames(), modId));
+            futures.add(saveTag(cache, "minecraft", "block", "mineable/axe", addon.getCabinetNames(), modId));
         }
         return futures;
     }
 
     private CompletableFuture<?> saveTag(CachedOutput cache, String ns, String type, String tagPath, List<String> names, String modId) {
         JsonObject tag = new JsonObject();
+        tag.addProperty("replace", false);
         JsonArray values = new JsonArray();
         for (String name : names) values.add(modId + ":" + name);
         tag.add("values", values);

@@ -396,11 +396,12 @@ public class DelightDataGenerator implements DataProvider {
         String modId = addon.getModId();
         for (PlaceableFoodInfo food : addon.getPlaceableFoodInfos()) {
             if (food.type() == PlaceableFoodInfo.FoodType.PIE) {
+                // This seems useless for Farmer's Delight Refabricated
                 // Pie loot table
-                JsonObject loot = new JsonObject();
-                loot.addProperty("type", "minecraft:block");
-                loot.addProperty("random_sequence", modId + ":blocks/" + food.name());
-                futures.add(save(cache, "data", modId, "loot_tables/blocks/" + food.name() + ".json", loot));
+                //JsonObject loot = new JsonObject();
+                //loot.addProperty("type", "minecraft:block");
+                //loot.addProperty("random_sequence", modId + ":blocks/" + food.name());
+                //futures.add(save(cache, "data", modId, "loot_tables/blocks/" + food.name() + ".json", loot));
 
                 // Pie cutting recipe
                 JsonObject recipe = new JsonObject();

@@ -5,6 +5,7 @@
 ### 🛠️ Minor Changes:
 
 - Fixed knifes not working correctly.
+- Fixed cooking recipes not working correctly.
 - Fixed cabinets not registering tags for Farmer's Delight cabinets.
 - Fixed pies not dropping slices when right-clicked with a knife.
 ***

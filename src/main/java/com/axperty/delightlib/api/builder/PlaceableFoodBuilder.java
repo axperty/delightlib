@@ -70,7 +70,8 @@ public class PlaceableFoodBuilder {
             addon.addCutoutBlock(block);
         } else {
             final Supplier<Item> serving = servingItem;
-            block = addon.registerBlock(name, () -> new FeastBlock(Block.Properties.ofFullCopy(Blocks.CAKE), serving, true));
+            final Supplier<Item> output = feastOutputItem;
+            block = addon.registerBlock(name, () -> new FeastBlock(Block.Properties.ofFullCopy(Blocks.CAKE), serving, output != null));
             addon.addCutoutBlock(block);
         }
         return addon.registerItem(name, () -> new BlockItem(block.get(), new Item.Properties().stacksTo(stack)));

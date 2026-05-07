@@ -289,7 +289,7 @@ public class DelightDataGenerator implements DataProvider {
         List<CompletableFuture<?>> futures = new ArrayList<>();
         String modId = addon.getModId();
         for (Map.Entry<String, JsonObject> entry : addon.getRecipes().entrySet()) {
-            futures.add(save(cache, "data", modId, "recipe/" + entry.getKey() + ".json", entry.getValue()));
+            futures.add(save(cache, "data", modId, "recipes/" + entry.getKey() + ".json", entry.getValue()));
         }
         return futures;
     }

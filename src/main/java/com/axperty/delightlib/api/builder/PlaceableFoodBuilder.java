@@ -20,7 +20,6 @@ public class PlaceableFoodBuilder {
     private boolean isFeast = false;
     private Supplier<Item> servingItem;
     private Supplier<Item> feastOutputItem;
-    private boolean hasLeftovers = true;
 
     public PlaceableFoodBuilder(DelightAddon addon, String name) {
         this.addon = addon;
@@ -37,22 +36,14 @@ public class PlaceableFoodBuilder {
         return pie(addon.getItem(sliceItemName));
     }
 
-    public PlaceableFoodBuilder feast(Supplier<Item> servingItem, boolean hasLeftovers) {
+    public PlaceableFoodBuilder feast(Supplier<Item> servingItem) {
         this.isFeast = true; this.isPie = false;
         this.servingItem = servingItem;
-        this.hasLeftovers = hasLeftovers;
         return this;
     }
 
-    public PlaceableFoodBuilder feast(Supplier<Item> servingItem) {
-        return feast(servingItem, true);
-    }
-
-    public PlaceableFoodBuilder feast(String servingItemName, boolean hasLeftovers) {
-        return feast(addon.getItem(servingItemName), hasLeftovers);
-    }
     public PlaceableFoodBuilder feast(String servingItemName) {
-        return feast(servingItemName, true);
+        return feast(addon.getItem(servingItemName));
     }
 
     public PlaceableFoodBuilder feastOutput(Supplier<Item> item) {
@@ -78,8 +69,7 @@ public class PlaceableFoodBuilder {
             block = addon.registerBlock(name, () -> new PieBlock(Block.Properties.copy(Blocks.CAKE), slice));
         } else {
             final Supplier<Item> serving = servingItem;
-            final boolean leftovers = hasLeftovers;
-            block = addon.registerBlock(name, () -> new FeastBlock(Block.Properties.copy(Blocks.CAKE), serving, leftovers));
+            block = addon.registerBlock(name, () -> new FeastBlock(Block.Properties.copy(Blocks.CAKE), serving, true));
         }
         return addon.registerItem(name, () -> new PlaceableItem(block.get(), new Item.Properties().stacksTo(stack)));
     }

@@ -426,16 +426,7 @@ public class DelightDataGenerator implements DataProvider {
                 recipe.add("result", result);
 
                 JsonObject tool = new JsonObject();
-                tool.addProperty("fabric:type", "fabric:any");
-                JsonArray toolIngredients = new JsonArray();
-                JsonObject tool1 = new JsonObject();
-                tool1.addProperty("fabric:type", "farmersdelight:item_ability");
-                tool1.addProperty("action", "knife_dig");
-                toolIngredients.add(tool1);
-                JsonObject tool2 = new JsonObject();
-                tool2.addProperty("tag", "c:tools/knife");
-                toolIngredients.add(tool2);
-                tool.add("ingredients", toolIngredients);
+                tool.addProperty("tag", "c:tools/knife");
                 recipe.add("tool", tool);
 
                 futures.add(save(cache, "data", modId, "recipe/cutting/" + food.name() + ".json", recipe));

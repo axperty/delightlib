@@ -28,7 +28,7 @@ dependencies {
 }
 
 def expandProps = [
-        "version": project.mod_version,
+        "mod_version": project.mod_version,
         "mod_id": project.mod_id,
         "mod_name": project.mod_name,
         "mod_description": project.mod_description,

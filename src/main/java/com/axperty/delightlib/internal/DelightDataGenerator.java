@@ -400,15 +400,18 @@ public class DelightDataGenerator implements DataProvider {
                 JsonObject loot = new JsonObject();
                 loot.addProperty("type", "minecraft:block");
                 loot.addProperty("random_sequence", modId + ":blocks/" + food.name());
-                futures.add(save(cache, "data", modId, "loot_table/blocks/" + food.name() + ".json", loot));
+                futures.add(save(cache, "data", modId, "loot_tables/blocks/" + food.name() + ".json", loot));
+
                 // Pie cutting recipe
                 JsonObject recipe = new JsonObject();
                 recipe.addProperty("type", "farmersdelight:cutting");
+
                 JsonArray ingredients = new JsonArray();
                 JsonObject ing = new JsonObject();
                 ing.addProperty("item", modId + ":" + food.name());
                 ingredients.add(ing);
                 recipe.add("ingredients", ingredients);
+
                 JsonArray result = new JsonArray();
                 JsonObject res = new JsonObject();
                 JsonObject resItem = new JsonObject();
@@ -420,6 +423,7 @@ public class DelightDataGenerator implements DataProvider {
                 res.add("item", resItem);
                 result.add(res);
                 recipe.add("result", result);
+
                 JsonArray tools = new JsonArray();
                 JsonObject tool1 = new JsonObject();
                 tool1.addProperty("type", "farmersdelight:item_ability");
@@ -429,17 +433,27 @@ public class DelightDataGenerator implements DataProvider {
                 tool2.addProperty("tag", "c:tools/knife");
                 tools.add(tool2);
                 recipe.add("tool", tools);
+
                 futures.add(save(cache, "data", "farmersdelight", "recipe/cutting/" + food.name() + ".json", recipe));
             } else {
                 // Feast loot table
                 JsonObject loot = new JsonObject();
                 loot.addProperty("type", "minecraft:block");
-                loot.addProperty("random_sequence", modId + ":blocks/" + food.name());
+
                 JsonArray pools = new JsonArray();
+
                 // Pool 1: Block itself if servings == 4
                 JsonObject pool1 = new JsonObject();
-                pool1.addProperty("rolls", 1.0);
-                pool1.addProperty("bonus_rolls", 0.0);
+                pool1.addProperty("name", "pool1");
+                pool1.addProperty("rolls", 1);
+
+                JsonArray entries1 = new JsonArray();
+                JsonObject entry1 = new JsonObject();
+                entry1.addProperty("type", "minecraft:item");
+                entry1.addProperty("name", modId + ":" + food.name());
+                entries1.add(entry1);
+                pool1.add("entries", entries1);
+
                 JsonArray conds1 = new JsonArray();
                 JsonObject cond1 = new JsonObject();
                 cond1.addProperty("condition", "minecraft:block_state_property");
@@ -449,35 +463,35 @@ public class DelightDataGenerator implements DataProvider {
                 cond1.add("properties", props1);
                 conds1.add(cond1);
                 pool1.add("conditions", conds1);
-                JsonArray entries1 = new JsonArray();
-                JsonObject entry1 = new JsonObject();
-                entry1.addProperty("type", "minecraft:item");
-                entry1.addProperty("name", modId + ":" + food.name());
-                entries1.add(entry1);
-                pool1.add("entries", entries1);
+
                 pools.add(pool1);
+
                 // Pool 2: Bowl if servings != 4
                 JsonObject pool2 = new JsonObject();
-                pool2.addProperty("rolls", 1.0);
-                pool2.addProperty("bonus_rolls", 0.0);
-                JsonArray conds2 = new JsonArray();
-                JsonObject inverted2 = new JsonObject();
-                inverted2.addProperty("condition", "minecraft:inverted");
-                inverted2.add("term", cond1);
-                conds2.add(inverted2);
-                pool2.add("conditions", conds2);
+                pool2.addProperty("name", "pool2");
+                pool2.addProperty("rolls", 1);
+
                 JsonArray entries2 = new JsonArray();
                 JsonObject entry2 = new JsonObject();
                 entry2.addProperty("type", "minecraft:item");
                 entry2.addProperty("name", "minecraft:bowl");
                 entries2.add(entry2);
                 pool2.add("entries", entries2);
+
+                JsonArray conds2 = new JsonArray();
+                JsonObject inverted2 = new JsonObject();
+                inverted2.addProperty("condition", "minecraft:inverted");
+                inverted2.add("term", cond1);
+                conds2.add(inverted2);
+                pool2.add("conditions", conds2);
+
                 pools.add(pool2);
+
                 // Pool 3: Custom output item if servings != 4
                 JsonObject pool3 = new JsonObject();
-                pool3.addProperty("rolls", 1.0);
-                pool3.addProperty("bonus_rolls", 0.0);
-                pool3.add("conditions", conds2); // reuse inverted condition
+                pool3.addProperty("name", "pool3");
+                pool3.addProperty("rolls", 1);
+
                 JsonArray entries3 = new JsonArray();
                 JsonObject entry3 = new JsonObject();
                 entry3.addProperty("type", "minecraft:item");
@@ -487,9 +501,13 @@ public class DelightDataGenerator implements DataProvider {
                 entry3.addProperty("name", outputItemId);
                 entries3.add(entry3);
                 pool3.add("entries", entries3);
+
+                pool3.add("conditions", conds2);
+
                 pools.add(pool3);
+
                 loot.add("pools", pools);
-                futures.add(save(cache, "data", modId, "loot_table/blocks/" + food.name() + ".json", loot));
+                futures.add(save(cache, "data", modId, "loot_tables/blocks/" + food.name() + ".json", loot));
             }
         }
         return futures;

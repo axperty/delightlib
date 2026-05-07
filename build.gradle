@@ -32,7 +32,8 @@ def expandProps = [
         "mod_id": project.mod_id,
         "mod_name": project.mod_name,
         "mod_description": project.mod_description,
-        "mod_authors": project.mod_authors
+        "mod_authors": project.mod_authors,
+        "mod_license": project.mod_license
 ]
 
 processResources {

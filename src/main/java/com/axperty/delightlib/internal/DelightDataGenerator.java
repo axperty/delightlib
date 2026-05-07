@@ -46,13 +46,13 @@ public class DelightDataGenerator implements DataProvider {
         String modId = addon.getModId();
 
         if (!addon.getKnifeNames().isEmpty()) {
-            futures.add(saveTag(cache, "c", "item", "tools/knife", addon.getKnifeNames(), modId));
-            futures.add(saveTag(cache, "farmersdelight", "item", "tools/knives", addon.getKnifeNames(), modId));
+            futures.add(saveTag(cache, "c", "items", "tools/knifes", addon.getKnifeNames(), modId));
+            futures.add(saveTag(cache, "farmersdelight", "items", "tools/knives", addon.getKnifeNames(), modId));
         }
         if (!addon.getCabinetNames().isEmpty()) {
-            futures.add(saveTag(cache, "farmersdelight", "block", "cabinets", addon.getCabinetNames(), modId));
-            futures.add(saveTag(cache, "farmersdelight", "item", "cabinets", addon.getCabinetNames(), modId));
-            futures.add(saveTag(cache, "minecraft", "block", "mineable/axe", addon.getCabinetNames(), modId));
+            futures.add(saveTag(cache, "farmersdelight", "blocks", "cabinets", addon.getCabinetNames(), modId));
+            futures.add(saveTag(cache, "farmersdelight", "items", "cabinets", addon.getCabinetNames(), modId));
+            futures.add(saveTag(cache, "minecraft", "blocks", "mineable/axe", addon.getCabinetNames(), modId));
         }
         return futures;
     }
@@ -426,17 +426,11 @@ public class DelightDataGenerator implements DataProvider {
                 result.add(res);
                 recipe.add("result", result);
 
-                JsonArray tools = new JsonArray();
-                JsonObject tool1 = new JsonObject();
-                tool1.addProperty("type", "farmersdelight:item_ability");
-                tool1.addProperty("action", "knife_dig");
-                tools.add(tool1);
-                JsonObject tool2 = new JsonObject();
-                tool2.addProperty("tag", "c:tools/knife");
-                tools.add(tool2);
-                recipe.add("tool", tools);
+                JsonObject tool = new JsonObject();
+                tool.addProperty("tag", "c:tools/knife");
+                recipe.add("tool", tool);
 
-                futures.add(save(cache, "data", "farmersdelight", "recipe/cutting/" + food.name() + ".json", recipe));
+                futures.add(save(cache, "data", modId, "recipes/cutting/" + food.name() + ".json", recipe));
             } else {
                 // Feast loot table
                 JsonObject loot = new JsonObject();

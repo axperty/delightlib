@@ -4,12 +4,9 @@
 
 ### 🛠️ Minor Changes:
 
-- Fixed a bug where the models and textures for placeable foods failed to load in-game.
-- Fixed a bug causing cabinets to break slowly when mined with an axe.
-- Separated the creation methods for placeable food items into `.feast()` and `.pie()`.
-- Added the `.feastOutput()` property for feast items to define the leftover item after all servings are consumed.
-- Removed the `hasLeftover` property since this behavior is now enabled by default.
-
+- Fixed knifes not working correctly.
+- Fixed cabinets not registering tags for Farmer's Delight cabinets.
+- Fixed pies not dropping slices when right-clicked with a knife.
 ***
 
 ### 📝 Feedback and Support:

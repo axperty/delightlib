@@ -52,6 +52,7 @@ public class DelightDataGenerator implements DataProvider {
         if (!addon.getCabinetNames().isEmpty()) {
             futures.add(saveTag(cache, "farmersdelight", "block", "cabinets", addon.getCabinetNames(), modId));
             futures.add(saveTag(cache, "farmersdelight", "item", "cabinets", addon.getCabinetNames(), modId));
+            futures.add(saveTag(cache, "minecraft", "block", "mineable/axe", addon.getCabinetNames(), modId));
         }
         return futures;
     }

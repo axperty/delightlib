@@ -416,18 +416,16 @@ public class DelightDataGenerator implements DataProvider {
 
                 JsonArray result = new JsonArray();
                 JsonObject res = new JsonObject();
-                JsonObject resItem = new JsonObject();
-                resItem.addProperty("count", 4);
                 String sliceId = food.sliceItem() != null ?
                         ForgeRegistries.ITEMS.getKey(food.sliceItem().get()).toString() :
                         modId + ":" + food.name() + "_slice";
-                resItem.addProperty("id", sliceId);
-                res.add("item", resItem);
+                res.addProperty("item", sliceId);
+                res.addProperty("count", 4);
                 result.add(res);
                 recipe.add("result", result);
 
                 JsonObject tool = new JsonObject();
-                tool.addProperty("tag", "c:tools/knife");
+                tool.addProperty("tag", "forge:tools/knives");
                 recipe.add("tool", tool);
 
                 futures.add(save(cache, "data", modId, "recipes/cutting/" + food.name() + ".json", recipe));

@@ -402,14 +402,17 @@ public class DelightDataGenerator implements DataProvider {
                 loot.addProperty("type", "minecraft:block");
                 loot.addProperty("random_sequence", modId + ":blocks/" + food.name());
                 futures.add(save(cache, "data", modId, "loot_tables/blocks/" + food.name() + ".json", loot));
+
                 // Pie cutting recipe
                 JsonObject recipe = new JsonObject();
                 recipe.addProperty("type", "farmersdelight:cutting");
+
                 JsonArray ingredients = new JsonArray();
                 JsonObject ing = new JsonObject();
                 ing.addProperty("item", modId + ":" + food.name());
                 ingredients.add(ing);
                 recipe.add("ingredients", ingredients);
+
                 JsonArray result = new JsonArray();
                 JsonObject res = new JsonObject();
                 JsonObject resItem = new JsonObject();
@@ -421,16 +424,12 @@ public class DelightDataGenerator implements DataProvider {
                 res.add("item", resItem);
                 result.add(res);
                 recipe.add("result", result);
-                JsonArray tools = new JsonArray();
-                JsonObject tool1 = new JsonObject();
-                tool1.addProperty("type", "farmersdelight:item_ability");
-                tool1.addProperty("action", "knife_dig");
-                tools.add(tool1);
-                JsonObject tool2 = new JsonObject();
-                tool2.addProperty("tag", "c:tools/knife");
-                tools.add(tool2);
-                recipe.add("tool", tools);
-                futures.add(save(cache, "data", "farmersdelight", "recipe/cutting/" + food.name() + ".json", recipe));
+
+                JsonObject tool = new JsonObject();
+                tool.addProperty("tag", "c:tools/knife");
+                recipe.add("tool", tool);
+
+                futures.add(save(cache, "data", modId, "recipes/cutting/" + food.name() + ".json", recipe));
             } else {
                 // Feast loot table
                 JsonObject loot = new JsonObject();

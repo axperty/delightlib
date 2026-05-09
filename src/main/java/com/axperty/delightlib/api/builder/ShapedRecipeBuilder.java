@@ -51,9 +51,8 @@ public class ShapedRecipeBuilder {
 
         JsonObject keyObj = new JsonObject();
         for (Map.Entry<Character, String> entry : keys.entrySet()) {
-            JsonObject val = new JsonObject();
-            val.addProperty(keyIsTag.getOrDefault(entry.getKey(), false) ? "tag" : "item", entry.getValue());
-            keyObj.add(String.valueOf(entry.getKey()), val);
+            boolean isTag = keyIsTag.getOrDefault(entry.getKey(), false);
+            keyObj.addProperty(String.valueOf(entry.getKey()), (isTag ? "#" : "") + entry.getValue());
         }
         recipe.add("key", keyObj);
 

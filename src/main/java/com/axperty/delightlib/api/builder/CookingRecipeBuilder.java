@@ -26,16 +26,12 @@ public class CookingRecipeBuilder {
     }
 
     public CookingRecipeBuilder addIngredient(String itemId) {
-        JsonObject ingredient = new JsonObject();
-        ingredient.addProperty("item", itemId);
-        ingredients.add(ingredient);
+        ingredients.add(itemId);
         return this;
     }
 
     public CookingRecipeBuilder addTagIngredient(String tag) {
-        JsonObject ingredient = new JsonObject();
-        ingredient.addProperty("tag", tag);
-        ingredients.add(ingredient);
+        ingredients.add("#" + tag);
         return this;
     }
 

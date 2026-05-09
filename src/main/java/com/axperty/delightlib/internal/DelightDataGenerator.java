@@ -416,13 +416,11 @@ public class DelightDataGenerator implements DataProvider {
 
                 JsonArray result = new JsonArray();
                 JsonObject res = new JsonObject();
-                JsonObject resItem = new JsonObject();
-                resItem.addProperty("count", 4);
+                res.addProperty("count", 4);
                 String sliceId = food.sliceItem() != null ?
                         net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(food.sliceItem().get()).toString() :
                         modId + ":" + food.name() + "_slice";
-                resItem.addProperty("item", sliceId);
-                res.add("item", resItem);
+                res.addProperty("item", sliceId);
                 result.add(res);
                 recipe.add("result", result);
 

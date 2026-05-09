@@ -58,9 +58,10 @@ public class CookingRecipeBuilder {
 
         JsonObject recipe = new JsonObject();
         recipe.addProperty("type", "farmersdelight:cooking");
+        recipe.addProperty("cookingtime", cookingTime);
         recipe.addProperty("experience", experience);
         recipe.add("ingredients", ingredients);
-        if (recipeBookTab != null && !recipeBookTab.isEmpty()) recipe.addProperty("recipe_book_tab", recipeBookTab);
+        recipe.addProperty("recipe_book_tab", recipeBookTab);
 
         JsonObject result = new JsonObject();
         result.addProperty("count", resultCount);
@@ -73,7 +74,6 @@ public class CookingRecipeBuilder {
             container.addProperty("id", containerId);
             recipe.add("container", container);
         }
-        recipe.addProperty("cookingtime", cookingTime);
 
         addon.addRecipe("cooking/" + name, recipe);
     }

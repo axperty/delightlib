@@ -423,9 +423,9 @@ public class DelightDataGenerator implements DataProvider {
                 JsonObject recipe = new JsonObject();
                 recipe.addProperty("type", "farmersdelight:cutting");
                 JsonArray ingredients = new JsonArray();
-                JsonObject ingredient = new JsonObject();
-                ingredient.addProperty("item", modId + ":" + food.name());
-                ingredients.add(ingredient);
+                JsonObject ing = new JsonObject();
+                ing.addProperty("item", modId + ":" + food.name());
+                ingredients.add(ing);
                 recipe.add("ingredients", ingredients);
 
                 JsonArray result = new JsonArray();

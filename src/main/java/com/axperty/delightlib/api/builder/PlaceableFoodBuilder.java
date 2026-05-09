@@ -78,11 +78,13 @@ public class PlaceableFoodBuilder {
             case PIE -> {
                 final Supplier<Item> slice = sliceItem;
                 block = addon.registerBlock(name, () -> new PieBlock(Block.Properties.ofFullCopy(Blocks.CAKE), slice));
+                addon.addCutoutBlock(block);
             }
             case FEAST -> {
                 final Supplier<Item> serving = servingItem;
                 final Supplier<Item> output = feastOutputItem;
                 block = addon.registerBlock(name, () -> new FeastBlock(Block.Properties.ofFullCopy(Blocks.CAKE), serving, output != null));
+                addon.addCutoutBlock(block);
             }
         }
         Supplier<Block> finalBlock = block;

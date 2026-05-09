@@ -5,6 +5,7 @@ import com.axperty.delightlib.api.DelightAddon;
 import com.axperty.delightlib.api.PlaceableFoodInfo;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -430,7 +431,7 @@ public class DelightDataGenerator implements DataProvider {
                 JsonObject resItem = new JsonObject();
                 resItem.addProperty("count", 4);
                 String sliceId = food.sliceItem() != null ?
-                        net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(food.sliceItem().get()).toString() :
+                        BuiltInRegistries.ITEM.getKey(food.sliceItem().get()).toString() :
                         modId + ":" + food.name() + "_slice";
                 resItem.addProperty("id", sliceId);
                 res.add("item", resItem);
@@ -496,8 +497,8 @@ public class DelightDataGenerator implements DataProvider {
                 JsonObject entry3 = new JsonObject();
                 entry3.addProperty("type", "minecraft:item");
                 String outputItemId = food.feastOutputItem() != null ?
-                        net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(food.feastOutputItem().get()).toString() :
-                        (food.servingItem() != null ? net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(food.servingItem().get()).toString() : "minecraft:air");
+                        BuiltInRegistries.ITEM.getKey(food.feastOutputItem().get()).toString() :
+                        (food.servingItem() != null ? BuiltInRegistries.ITEM.getKey(food.servingItem().get()).toString() : "minecraft:air");
                 entry3.addProperty("name", outputItemId);
                 entries3.add(entry3);
                 pool3.add("entries", entries3);

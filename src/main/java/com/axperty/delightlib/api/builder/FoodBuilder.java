@@ -3,11 +3,15 @@ package com.axperty.delightlib.api.builder;
 import com.axperty.delightlib.api.DelightAddon;
 import com.axperty.delightlib.api.FoodDuration;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import vectorwing.farmersdelight.common.item.ConsumableItem;
 import vectorwing.farmersdelight.common.registry.ModEffects;
 
@@ -84,17 +88,17 @@ public class FoodBuilder {
         final Item remainder = craftRemainder;
         final int stack = maxStackSize;
         
-        net.minecraft.world.item.component.Consumable.Builder consumableBuilder = isDrinkable ? 
-                net.minecraft.world.item.component.Consumables.defaultDrink() : 
-                net.minecraft.world.item.component.Consumables.defaultFood();
+        Consumable.Builder consumableBuilder = isDrinkable ?
+                Consumables.defaultDrink() :
+                Consumables.defaultFood();
         if (fast) consumableBuilder.consumeSeconds(0.8F);
         for (EffectEntry e : effects) {
-            consumableBuilder.onConsume(new net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect(e.effect.get(), e.chance));
+            consumableBuilder.onConsume(new ApplyStatusEffectsConsumeEffect(e.effect.get(), e.chance));
         }
-        final net.minecraft.world.item.component.Consumable consumable = consumableBuilder.build();
+        final Consumable consumable = consumableBuilder.build();
 
         return addon.registerItem(name, () -> {
-            Item.Properties props = addon.defaultItemProperties(name).food(food).component(net.minecraft.core.component.DataComponents.CONSUMABLE, consumable).stacksTo(stack);
+            Item.Properties props = addon.defaultItemProperties(name).food(food).component(DataComponents.CONSUMABLE, consumable).stacksTo(stack);
             if (remainder != null) props = props.craftRemainder(remainder);
             return new ConsumableItem(props, effectTooltip, customTip);
         });

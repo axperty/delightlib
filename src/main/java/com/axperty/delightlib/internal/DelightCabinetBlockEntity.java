@@ -1,9 +1,10 @@
 package com.axperty.delightlib.internal;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.network.chat.Component;
@@ -68,7 +69,7 @@ public class DelightCabinetBlockEntity extends RandomizableContainerBlockEntity 
     @Override protected NonNullList<ItemStack> getItems() { return contents; }
     @Override protected void setItems(NonNullList<ItemStack> items) { contents = items; }
     @Override protected Component getDefaultName() {
-        net.minecraft.resources.Identifier loc = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(this.getBlockState().getBlock());
+        Identifier loc = BuiltInRegistries.BLOCK.getKey(this.getBlockState().getBlock());
         return Component.translatable("container." + loc.getNamespace() + "." + loc.getPath());
     }
     @Override protected AbstractContainerMenu createMenu(int id, Inventory player) { return ChestMenu.threeRows(id, player, this); }

@@ -12,12 +12,15 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,7 +91,7 @@ public class DelightAddon {
             cabinetBlockEntityType = () -> type;
 
             ItemStorage.SIDED.registerForBlockEntity(
-                (be, direction) -> new vectorwing.farmersdelight.refabricated.inventory.InvWrapper((net.minecraft.world.Container) be),
+                (be, direction) -> new vectorwing.farmersdelight.refabricated.inventory.InvWrapper((Container) be),
                 type
             );
 
@@ -127,7 +130,7 @@ public class DelightAddon {
     public void trackCabinet(String name) {
         cabinetNames.add(name);
         blockNames.add(name);
-        langEntries.put("block." + modId + "." + name, toTitleCase(name));
+        langEntries.put("item." + modId + "." + name, toTitleCase(name));
         langEntries.put("container." + modId + "." + name, toTitleCase(name));
     }
 
@@ -163,11 +166,11 @@ public class DelightAddon {
 
     // Helper methods for properties (mandatory in 1.21.2)
     public Item.Properties defaultItemProperties(String name) {
-        return new Item.Properties().setId(net.minecraft.resources.ResourceKey.create(BuiltInRegistries.ITEM.key(), Identifier.fromNamespaceAndPath(modId, name)));
+        return new Item.Properties().setId(ResourceKey.create(BuiltInRegistries.ITEM.key(), Identifier.fromNamespaceAndPath(modId, name)));
     }
 
-    public net.minecraft.world.level.block.state.BlockBehaviour.Properties defaultBlockProperties(String name, net.minecraft.world.level.block.state.BlockBehaviour.Properties props) {
-        return props.setId(net.minecraft.resources.ResourceKey.create(BuiltInRegistries.BLOCK.key(), Identifier.fromNamespaceAndPath(modId, name)));
+    public BlockBehaviour.Properties defaultBlockProperties(String name, BlockBehaviour.Properties props) {
+        return props.setId(ResourceKey.create(BuiltInRegistries.BLOCK.key(), Identifier.fromNamespaceAndPath(modId, name)));
     }
 
     // Registry helpers

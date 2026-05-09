@@ -5,6 +5,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.function.Supplier;
+
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 
 public class CookingRecipeBuilder {
@@ -37,7 +39,7 @@ public class CookingRecipeBuilder {
     public CookingRecipeBuilder result(String itemId, int count) { this.resultId = itemId; this.resultCount = count; return this; }
 
     public CookingRecipeBuilder result(Supplier<Item> item) {
-        this.resultId = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(item.get()).toString();
+        this.resultId = BuiltInRegistries.ITEM.getKey(item.get()).toString();
         return this;
     }
 

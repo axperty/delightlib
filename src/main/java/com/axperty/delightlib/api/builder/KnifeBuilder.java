@@ -1,9 +1,13 @@
 package com.axperty.delightlib.api.builder;
 
 import com.axperty.delightlib.api.DelightAddon;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
 import vectorwing.farmersdelight.common.item.KnifeItem;
+import vectorwing.farmersdelight.common.registry.ModItems;
 
 import java.util.function.Supplier;
 
@@ -31,7 +35,8 @@ public class KnifeBuilder {
         final ToolMaterial t = tier;
 
         return addon.registerItem(name, () -> {
-            Item.Properties props = addon.defaultItemProperties(name);
+            Item.Properties props = ModItems.knifeItem(t)
+                .setId(ResourceKey.create(BuiltInRegistries.ITEM.key(), Identifier.fromNamespaceAndPath(addon.getModId(), name)));
             if (fr) props = props.fireResistant();
             return new KnifeItem(props);
         });

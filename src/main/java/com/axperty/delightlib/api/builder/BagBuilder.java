@@ -10,22 +10,22 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class BagBuilder {
+public class BagBuilder extends RecipeRequiredBuilder<BagBuilder> {
     private final DelightAddon addon;
     private final String name;
-    private Consumer<ShapedRecipeBuilder> recipeConfig = null;
 
     public BagBuilder(DelightAddon addon, String name) {
         this.addon = addon;
         this.name = name;
     }
 
-    public BagBuilder recipe(Consumer<ShapedRecipeBuilder> recipeConfig) {
-        this.recipeConfig = recipeConfig;
+    @Override
+    protected BagBuilder self() {
         return this;
     }
 
-    public Supplier<Block> build() {
+    @Override
+    protected Supplier<Block> doBuild() {
         if (recipeConfig == null) {
             throw new IllegalStateException("Bag '" + name + "' requires a shaped recipe. Call .recipe() before .build().");
         }

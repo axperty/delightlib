@@ -10,22 +10,22 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class CrateBuilder {
+public class CrateBuilder extends RecipeRequiredBuilder<CrateBuilder> {
     private final DelightAddon addon;
     private final String name;
-    private Consumer<ShapedRecipeBuilder> recipeConfig = null;
 
     public CrateBuilder(DelightAddon addon, String name) {
         this.addon = addon;
         this.name = name;
     }
 
-    public CrateBuilder recipe(Consumer<ShapedRecipeBuilder> recipeConfig) {
-        this.recipeConfig = recipeConfig;
+    @Override
+    protected CrateBuilder self() {
         return this;
     }
 
-    public Supplier<Block> build() {
+    @Override
+    protected Supplier<Block> doBuild() {
         if (recipeConfig == null) {
             throw new IllegalStateException("Crate '" + name + "' requires a shaped recipe. Call .recipe() before .build().");
         }

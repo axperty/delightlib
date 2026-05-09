@@ -12,23 +12,27 @@ import vectorwing.farmersdelight.common.item.FuelBlockItem;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class CabinetBuilder {
+public class CabinetBuilder extends RecipeRequiredBuilder<CabinetBuilder> {
     private final DelightAddon addon;
     private final String name;
     private SoundType soundType = null;
     private int burnTime = 300;
-    private Consumer<ShapedRecipeBuilder> recipeConfig = null;
 
     public CabinetBuilder(DelightAddon addon, String name) {
         this.addon = addon;
         this.name = name;
     }
 
+    @Override
+    protected CabinetBuilder self() {
+        return this;
+    }
+
     public CabinetBuilder soundType(SoundType soundType) { this.soundType = soundType; return this; }
     public CabinetBuilder burnTime(int burnTime) { this.burnTime = burnTime; return this; }
-    public CabinetBuilder recipe(Consumer<ShapedRecipeBuilder> recipeConfig) { this.recipeConfig = recipeConfig; return this; }
 
-    public Supplier<Block> build() {
+    @Override
+    protected Supplier<Block> doBuild() {
         if (recipeConfig == null) {
             throw new IllegalStateException("Cabinet '" + name + "' requires a shaped recipe. Call .recipe() before .build().");
         }

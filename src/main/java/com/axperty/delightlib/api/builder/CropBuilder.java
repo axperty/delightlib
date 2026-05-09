@@ -8,7 +8,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 public class CropBuilder {
@@ -40,10 +39,10 @@ public class CropBuilder {
         String seedName = seedIsItem ? name : name + "_seeds";
         String blockName = name + "_crop";
 
-        AtomicReference<Supplier<Item>> seedHolder = new AtomicReference<>();
+        Supplier<Item> seedSupplier = addon.getItem(seedName);
 
         Supplier<Block> cropBlock = addon.registerBlock(blockName, () ->
-                new DelightCropBlock(Block.Properties.ofFullCopy(Blocks.WHEAT), () -> seedHolder.get().get()));
+                new DelightCropBlock(Block.Properties.ofFullCopy(Blocks.WHEAT), seedSupplier));
 
         Supplier<Item> cropItem;
         Item.Properties properties = new Item.Properties();
@@ -56,10 +55,9 @@ public class CropBuilder {
 
         if (seedIsItem) {
             cropItem = addon.registerItem(name, () -> new BlockItem(cropBlock.get(), properties));
-            seedHolder.set(cropItem);
         } else {
             cropItem = addon.registerItem(name, () -> new Item(properties));
-            seedHolder.set(addon.registerItem(seedName, () -> new BlockItem(cropBlock.get(), new Item.Properties())));
+            addon.registerItem(seedName, () -> new BlockItem(cropBlock.get(), new Item.Properties()));
         }
 
         addon.trackCrop(name, seedName, blockName, seedIsItem);

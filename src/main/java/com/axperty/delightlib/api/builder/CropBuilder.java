@@ -4,7 +4,7 @@ import com.axperty.delightlib.api.DelightAddon;
 import com.axperty.delightlib.internal.DelightCropBlock;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemNameBlockItem;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
@@ -51,22 +51,22 @@ public class CropBuilder {
                     .nutrition(nutrition).saturationModifier(saturation).build();
             if (seedIsItem) {
                 cropItem = addon.registerItem(name, () ->
-                        new ItemNameBlockItem(cropBlock.get(), new Item.Properties().food(food)));
+                        new BlockItem(cropBlock.get(), new Item.Properties().food(food)));
                 seedHolder[0] = cropItem;
             } else {
                 cropItem = addon.registerItem(name, () -> new Item(new Item.Properties().food(food)));
                 seedHolder[0] = addon.registerItem(seedName, () ->
-                        new ItemNameBlockItem(cropBlock.get(), new Item.Properties()));
+                        new BlockItem(cropBlock.get(), new Item.Properties()));
             }
         } else {
             if (seedIsItem) {
                 cropItem = addon.registerItem(name, () ->
-                        new ItemNameBlockItem(cropBlock.get(), new Item.Properties()));
+                        new BlockItem(cropBlock.get(), new Item.Properties()));
                 seedHolder[0] = cropItem;
             } else {
                 cropItem = addon.registerItem(name, () -> new Item(new Item.Properties()));
                 seedHolder[0] = addon.registerItem(seedName, () ->
-                        new ItemNameBlockItem(cropBlock.get(), new Item.Properties()));
+                        new BlockItem(cropBlock.get(), new Item.Properties()));
             }
         }
 

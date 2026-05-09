@@ -9,7 +9,6 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import vectorwing.farmersdelight.common.item.ConsumableItem;
-import vectorwing.farmersdelight.common.item.DrinkableItem;
 import vectorwing.farmersdelight.common.registry.ModEffects;
 
 import java.util.ArrayList;
@@ -76,9 +75,7 @@ public class FoodBuilder {
 
         FoodProperties.Builder foodBuilder = new FoodProperties.Builder()
                 .nutrition(nutrition).saturationModifier(saturation);
-        if (fast) foodBuilder.fast();
         if (alwaysEdible) foodBuilder.alwaysEdible();
-        for (EffectEntry e : effects) foodBuilder.effect(e.effect.get(), e.chance);
 
         final FoodProperties food = foodBuilder.build();
         final boolean drink = isDrinkable;
@@ -86,12 +83,20 @@ public class FoodBuilder {
         final boolean customTip = hasCustomTooltip;
         final Item remainder = craftRemainder;
         final int stack = maxStackSize;
+        
+        net.minecraft.world.item.component.Consumable.Builder consumableBuilder = isDrinkable ? 
+                net.minecraft.world.item.component.Consumables.defaultDrink() : 
+                net.minecraft.world.item.component.Consumables.defaultFood();
+        if (fast) consumableBuilder.consumeSeconds(0.8F);
+        for (EffectEntry e : effects) {
+            consumableBuilder.onConsume(new net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect(e.effect.get(), e.chance));
+        }
+        final net.minecraft.world.item.component.Consumable consumable = consumableBuilder.build();
 
         return addon.registerItem(name, () -> {
-            Item.Properties props = new Item.Properties().food(food).stacksTo(stack);
+            Item.Properties props = new Item.Properties().food(food).component(net.minecraft.core.component.DataComponents.CONSUMABLE, consumable).stacksTo(stack);
             if (remainder != null) props = props.craftRemainder(remainder);
-            return drink ? new DrinkableItem(props, effectTooltip, customTip)
-                         : new ConsumableItem(props, effectTooltip, customTip);
+            return new ConsumableItem(props, effectTooltip, customTip);
         });
     }
 }

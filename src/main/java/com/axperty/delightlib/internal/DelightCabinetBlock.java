@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +30,7 @@ import java.util.function.Supplier;
 @SuppressWarnings("deprecation")
 public class DelightCabinetBlock extends BaseEntityBlock {
 
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 
     private Supplier<BlockEntityType<DelightCabinetBlockEntity>> blockEntityType;
@@ -56,23 +56,20 @@ public class DelightCabinetBlock extends BaseEntityBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (level.isClientSide) return InteractionResult.SUCCESS;
+        if (level.isClientSide()) return InteractionResult.SUCCESS;
         if (level.getBlockEntity(pos) instanceof DelightCabinetBlockEntity cabinet) {
             player.openMenu(cabinet);
-            PiglinAi.angerNearbyPiglins(player, true);
+            cabinet.startOpen(player);
+            if (level instanceof ServerLevel serverLevel) {
+                PiglinAi.angerNearbyPiglins(serverLevel, player, true);
+            }
         }
         return InteractionResult.CONSUME;
     }
 
     @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!state.is(newState.getBlock())) {
-            if (level.getBlockEntity(pos) instanceof Container container) {
-                Containers.dropContents(level, pos, container);
-                level.updateNeighbourForOutputSignal(pos, this);
-            }
-            super.onRemove(state, level, pos, newState, isMoving);
-        }
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+        Containers.updateNeighboursAfterDestroy(state, level, pos);
     }
 
     @Override
@@ -91,7 +88,7 @@ public class DelightCabinetBlock extends BaseEntityBlock {
     }
 
     @Override public boolean hasAnalogOutputSignal(BlockState state) { return true; }
-    @Override public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+    @Override public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos, Direction direction) {
         return AbstractContainerMenu.getRedstoneSignalFromBlockEntity(level.getBlockEntity(pos));
     }
 

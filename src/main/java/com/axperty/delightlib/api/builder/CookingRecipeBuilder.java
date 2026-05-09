@@ -41,7 +41,7 @@ public class CookingRecipeBuilder {
     public CookingRecipeBuilder result(String itemId, int count) { this.resultId = itemId; this.resultCount = count; return this; }
 
     public CookingRecipeBuilder result(Supplier<Item> item) {
-        this.resultId = item.get().builtInRegistryHolder().key().location().toString();
+        this.resultId = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(item.get()).toString();
         return this;
     }
 

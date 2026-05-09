@@ -4,18 +4,18 @@ import com.axperty.delightlib.api.builder.*;
 import com.axperty.delightlib.internal.DelightCabinetBlock;
 import com.axperty.delightlib.internal.DelightCabinetBlockEntity;
 import com.google.gson.JsonObject;
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.slf4j.Logger;
@@ -67,8 +67,8 @@ public class DelightAddon {
 
     public void build() {
         if (tabTitle != null) {
-            tab = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, ResourceLocation.fromNamespaceAndPath(modId, "tab"), 
-                FabricItemGroup.builder()
+            tab = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, Identifier.fromNamespaceAndPath(modId, "tab"), 
+                FabricCreativeModeTab.builder()
                     .title(Component.literal(tabTitle))
                     .icon(tabIcon)
                     .displayItems((params, output) -> creativeTabItems.forEach(s -> output.accept(new ItemStack(s.get()))))
@@ -81,14 +81,14 @@ public class DelightAddon {
             
             BlockEntityType<DelightCabinetBlockEntity> type = Registry.register(
                 BuiltInRegistries.BLOCK_ENTITY_TYPE,
-                ResourceLocation.fromNamespaceAndPath(modId, "cabinet"),
+                Identifier.fromNamespaceAndPath(modId, "cabinet"),
                 FabricBlockEntityTypeBuilder.create((pos, state) -> new DelightCabinetBlockEntity(cabinetBlockEntityType.get(), pos, state), valid).build(null)
             );
             
             cabinetBlockEntityType = () -> type;
 
-            ItemStorage.SIDED.registerForBlockEntities(
-                (be, direction) -> InventoryStorage.of((net.minecraft.world.Container) be, direction),
+            ItemStorage.SIDED.registerForBlockEntity(
+                (be, direction) -> new vectorwing.farmersdelight.refabricated.inventory.InvWrapper((net.minecraft.world.Container) be),
                 type
             );
 
@@ -100,7 +100,7 @@ public class DelightAddon {
 
     // Builder factories
 
-    public KnifeBuilder knife(String name, Tier tier) { return new KnifeBuilder(this, name, tier); }
+    public KnifeBuilder knife(String name, ToolMaterial tier) { return new KnifeBuilder(this, name, tier); }
     public FoodBuilder food(String name) { return new FoodBuilder(this, name); }
     public PlaceableFoodBuilder placeableFood(String name) { return new PlaceableFoodBuilder(this, name); }
     public CabinetBuilder cabinet(String name) { return new CabinetBuilder(this, name); }
@@ -164,22 +164,22 @@ public class DelightAddon {
     // Registry helpers
 
     public Supplier<Item> registerItem(String name, Supplier<Item> supplier) {
-        Item item = Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(modId, name), supplier.get());
+        Item item = Registry.register(BuiltInRegistries.ITEM, Identifier.fromNamespaceAndPath(modId, name), supplier.get());
         Supplier<Item> registered = () -> item;
         creativeTabItems.add(registered);
         return registered;
     }
 
     public Supplier<Block> registerBlock(String name, Supplier<Block> supplier) {
-        Block block = Registry.register(BuiltInRegistries.BLOCK, ResourceLocation.fromNamespaceAndPath(modId, name), supplier.get());
+        Block block = Registry.register(BuiltInRegistries.BLOCK, Identifier.fromNamespaceAndPath(modId, name), supplier.get());
         return () -> block;
     }
 
     public Supplier<Item> getItem(String name) {
         if (name.contains(":")) {
-            return () -> BuiltInRegistries.ITEM.get(ResourceLocation.parse(name));
+            return () -> BuiltInRegistries.ITEM.getValue(Identifier.parse(name));
         } else {
-            return () -> BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(modId, name));
+            return () -> BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath(modId, name));
         }
     }
 

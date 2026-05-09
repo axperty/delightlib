@@ -32,9 +32,9 @@ public class BagBuilder {
         addon.trackBag(name);
 
         Supplier<Block> block = addon.registerBlock(name, () ->
-                new Block(BlockBehaviour.Properties.of().sound(SoundType.WOOL).strength(0.8f)));
+                new Block(addon.defaultBlockProperties(name, BlockBehaviour.Properties.of().sound(SoundType.WOOL).strength(0.8f))));
 
-        addon.registerItem(name, () -> new BlockItem(block.get(), new Item.Properties()));
+        addon.registerItem(name, () -> new BlockItem(block.get(), addon.defaultItemProperties(name)));
 
         ShapedRecipeBuilder rb = addon.shapedRecipe(name);
         recipeConfig.accept(rb);

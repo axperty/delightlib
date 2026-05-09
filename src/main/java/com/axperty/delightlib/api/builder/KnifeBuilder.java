@@ -31,7 +31,7 @@ public class KnifeBuilder {
         final ToolMaterial t = tier;
 
         return addon.registerItem(name, () -> {
-            Item.Properties props = new Item.Properties();
+            Item.Properties props = addon.defaultItemProperties(name);
             if (fr) props = props.fireResistant();
             return new KnifeItem(props);
         });

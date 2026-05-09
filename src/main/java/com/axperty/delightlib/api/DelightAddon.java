@@ -161,6 +161,15 @@ public class DelightAddon {
         langEntries.put("block." + modId + "." + blockName, toTitleCase(blockName));
     }
 
+    // Helper methods for properties (mandatory in 1.21.2)
+    public Item.Properties defaultItemProperties(String name) {
+        return new Item.Properties().setId(net.minecraft.resources.ResourceKey.create(BuiltInRegistries.ITEM.key(), Identifier.fromNamespaceAndPath(modId, name)));
+    }
+
+    public net.minecraft.world.level.block.state.BlockBehaviour.Properties defaultBlockProperties(String name, net.minecraft.world.level.block.state.BlockBehaviour.Properties props) {
+        return props.setId(net.minecraft.resources.ResourceKey.create(BuiltInRegistries.BLOCK.key(), Identifier.fromNamespaceAndPath(modId, name)));
+    }
+
     // Registry helpers
 
     public Supplier<Item> registerItem(String name, Supplier<Item> supplier) {

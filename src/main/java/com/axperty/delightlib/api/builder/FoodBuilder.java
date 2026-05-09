@@ -94,7 +94,7 @@ public class FoodBuilder {
         final net.minecraft.world.item.component.Consumable consumable = consumableBuilder.build();
 
         return addon.registerItem(name, () -> {
-            Item.Properties props = new Item.Properties().food(food).component(net.minecraft.core.component.DataComponents.CONSUMABLE, consumable).stacksTo(stack);
+            Item.Properties props = addon.defaultItemProperties(name).food(food).component(net.minecraft.core.component.DataComponents.CONSUMABLE, consumable).stacksTo(stack);
             if (remainder != null) props = props.craftRemainder(remainder);
             return new ConsumableItem(props, effectTooltip, customTip);
         });

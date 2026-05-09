@@ -42,7 +42,7 @@ public class CropBuilder {
         final Supplier<Item>[] seedHolder = new Supplier[1];
 
         Supplier<Block> cropBlock = addon.registerBlock(blockName, () ->
-                new DelightCropBlock(Block.Properties.ofFullCopy(Blocks.WHEAT), seedHolder[0]));
+                new DelightCropBlock(addon.defaultBlockProperties(blockName, Block.Properties.ofFullCopy(Blocks.WHEAT)), seedHolder[0]));
         addon.addCutoutBlock(cropBlock);
 
         Supplier<Item> cropItem;
@@ -51,22 +51,22 @@ public class CropBuilder {
                     .nutrition(nutrition).saturationModifier(saturation).build();
             if (seedIsItem) {
                 cropItem = addon.registerItem(name, () ->
-                        new BlockItem(cropBlock.get(), new Item.Properties().food(food)));
+                        new BlockItem(cropBlock.get(), addon.defaultItemProperties(name).food(food)));
                 seedHolder[0] = cropItem;
             } else {
-                cropItem = addon.registerItem(name, () -> new Item(new Item.Properties().food(food)));
+                cropItem = addon.registerItem(name, () -> new Item(addon.defaultItemProperties(name).food(food)));
                 seedHolder[0] = addon.registerItem(seedName, () ->
-                        new BlockItem(cropBlock.get(), new Item.Properties()));
+                        new BlockItem(cropBlock.get(), addon.defaultItemProperties(seedName)));
             }
         } else {
             if (seedIsItem) {
                 cropItem = addon.registerItem(name, () ->
-                        new BlockItem(cropBlock.get(), new Item.Properties()));
+                        new BlockItem(cropBlock.get(), addon.defaultItemProperties(name)));
                 seedHolder[0] = cropItem;
             } else {
-                cropItem = addon.registerItem(name, () -> new Item(new Item.Properties()));
+                cropItem = addon.registerItem(name, () -> new Item(addon.defaultItemProperties(name)));
                 seedHolder[0] = addon.registerItem(seedName, () ->
-                        new BlockItem(cropBlock.get(), new Item.Properties()));
+                        new BlockItem(cropBlock.get(), addon.defaultItemProperties(seedName)));
             }
         }
 

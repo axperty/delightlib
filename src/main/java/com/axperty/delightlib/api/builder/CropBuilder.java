@@ -8,6 +8,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 public class CropBuilder {
@@ -39,35 +40,26 @@ public class CropBuilder {
         String seedName = seedIsItem ? name : name + "_seeds";
         String blockName = name + "_crop";
 
-        final Supplier<Item>[] seedHolder = new Supplier[1];
+        AtomicReference<Supplier<Item>> seedHolder = new AtomicReference<>();
 
         Supplier<Block> cropBlock = addon.registerBlock(blockName, () ->
-                new DelightCropBlock(addon.defaultBlockProperties(blockName, Block.Properties.ofFullCopy(Blocks.WHEAT)), seedHolder[0]));
-        addon.addCutoutBlock(cropBlock);
+                new DelightCropBlock(Block.Properties.ofFullCopy(Blocks.WHEAT), () -> seedHolder.get().get()));
 
         Supplier<Item> cropItem;
+        Item.Properties properties = new Item.Properties();
         if (isFood) {
-            FoodProperties food = new FoodProperties.Builder()
-                    .nutrition(nutrition).saturationModifier(saturation).build();
-            if (seedIsItem) {
-                cropItem = addon.registerItem(name, () ->
-                        new BlockItem(cropBlock.get(), addon.defaultItemProperties(name).food(food)));
-                seedHolder[0] = cropItem;
-            } else {
-                cropItem = addon.registerItem(name, () -> new Item(addon.defaultItemProperties(name).food(food)));
-                seedHolder[0] = addon.registerItem(seedName, () ->
-                        new BlockItem(cropBlock.get(), addon.defaultItemProperties(seedName)));
-            }
+            properties.food(new FoodProperties.Builder()
+                    .nutrition(nutrition)
+                    .saturationModifier(saturation)
+                    .build());
+        }
+
+        if (seedIsItem) {
+            cropItem = addon.registerItem(name, () -> new BlockItem(cropBlock.get(), properties));
+            seedHolder.set(cropItem);
         } else {
-            if (seedIsItem) {
-                cropItem = addon.registerItem(name, () ->
-                        new BlockItem(cropBlock.get(), addon.defaultItemProperties(name)));
-                seedHolder[0] = cropItem;
-            } else {
-                cropItem = addon.registerItem(name, () -> new Item(addon.defaultItemProperties(name)));
-                seedHolder[0] = addon.registerItem(seedName, () ->
-                        new BlockItem(cropBlock.get(), addon.defaultItemProperties(seedName)));
-            }
+            cropItem = addon.registerItem(name, () -> new Item(properties));
+            seedHolder.set(addon.registerItem(seedName, () -> new BlockItem(cropBlock.get(), new Item.Properties())));
         }
 
         addon.trackCrop(name, seedName, blockName, seedIsItem);

@@ -9,26 +9,29 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import vectorwing.farmersdelight.common.item.FuelBlockItem;
 
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class CabinetBuilder {
+public class CabinetBuilder extends RecipeRequiredBuilder<CabinetBuilder> {
     private final DelightAddon addon;
     private final String name;
     private SoundType soundType = null;
     private int burnTime = 300;
-    private Consumer<ShapedRecipeBuilder> recipeConfig = null;
 
     public CabinetBuilder(DelightAddon addon, String name) {
         this.addon = addon;
         this.name = name;
     }
 
+    @Override
+    protected CabinetBuilder self() {
+        return this;
+    }
+
     public CabinetBuilder soundType(SoundType soundType) { this.soundType = soundType; return this; }
     public CabinetBuilder burnTime(int burnTime) { this.burnTime = burnTime; return this; }
-    public CabinetBuilder recipe(Consumer<ShapedRecipeBuilder> recipeConfig) { this.recipeConfig = recipeConfig; return this; }
 
-    public Supplier<Block> build() {
+    @Override
+    protected Supplier<Block> doBuild() {
         if (recipeConfig == null) {
             throw new IllegalStateException("Cabinet '" + name + "' requires a shaped recipe. Call .recipe() before .build().");
         }
@@ -37,14 +40,14 @@ public class CabinetBuilder {
         final int fuel = burnTime;
 
         Supplier<Block> block = addon.registerBlock(name, () -> {
-            Block.Properties props = addon.defaultBlockProperties(name, Block.Properties.ofFullCopy(Blocks.BARREL));
+            Block.Properties props = Block.Properties.ofFullCopy(Blocks.BARREL);
             if (sound != null) props = props.sound(sound);
             return new DelightCabinetBlock(props);
         });
 
         addon.registerItem(name, () -> fuel > 0
-                ? new FuelBlockItem(block.get(), addon.defaultItemProperties(name), fuel)
-                : new BlockItem(block.get(), addon.defaultItemProperties(name)));
+                ? new FuelBlockItem(block.get(), new Item.Properties(), fuel)
+                : new BlockItem(block.get(), new Item.Properties()));
 
         addon.addCabinetBlock(block);
 

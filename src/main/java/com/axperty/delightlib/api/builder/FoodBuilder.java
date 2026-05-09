@@ -32,6 +32,7 @@ public class FoodBuilder {
     private boolean hasFoodEffectTooltip = true;
     private boolean hasCustomTooltip = false;
     private final List<EffectEntry> effects = new ArrayList<>();
+    private boolean isStackSizeSetManually = false;
 
     private record EffectEntry(Supplier<MobEffectInstance> effect, float chance) {}
 
@@ -46,20 +47,34 @@ public class FoodBuilder {
     public FoodBuilder alwaysEdible() { this.alwaysEdible = true; return this; }
 
     public FoodBuilder bowlFood() {
-        this.craftRemainder = Items.BOWL;
-        this.maxStackSize = 16;
-        return this;
+        internalStacksTo(16);
+        return craftRemainder(Items.BOWL);
     }
 
     public FoodBuilder drinkable() {
         this.isDrinkable = true;
-        this.craftRemainder = Items.GLASS_BOTTLE;
-        this.maxStackSize = 16;
+        internalStacksTo(16);
+        return craftRemainder(Items.GLASS_BOTTLE);
+    }
+
+    public FoodBuilder craftRemainder(Item remainder) {
+        this.craftRemainder = remainder;
         return this;
     }
 
-    public FoodBuilder craftRemainder(Item remainder) { this.craftRemainder = remainder; return this; }
-    public FoodBuilder stacksTo(int size) { this.maxStackSize = size; return this; }
+    private FoodBuilder internalStacksTo(int size) {
+        if (!isStackSizeSetManually) {
+            this.maxStackSize = size;
+        }
+        return this;
+    }
+
+    public FoodBuilder stacksTo(int size) {
+        this.isStackSizeSetManually = true;
+        this.maxStackSize = size;
+        return this;
+    }
+
     public FoodBuilder hideEffectTooltip() { this.hasFoodEffectTooltip = false; return this; }
     public FoodBuilder customTooltip() { this.hasCustomTooltip = true; return this; }
 
@@ -82,12 +97,11 @@ public class FoodBuilder {
         if (alwaysEdible) foodBuilder.alwaysEdible();
 
         final FoodProperties food = foodBuilder.build();
-        final boolean drink = isDrinkable;
         final boolean effectTooltip = hasFoodEffectTooltip;
         final boolean customTip = hasCustomTooltip;
         final Item remainder = craftRemainder;
         final int stack = maxStackSize;
-        
+
         Consumable.Builder consumableBuilder = isDrinkable ?
                 Consumables.defaultDrink() :
                 Consumables.defaultFood();

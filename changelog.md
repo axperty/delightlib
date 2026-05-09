@@ -4,7 +4,7 @@
 
 ### ✨ What's New:
 
-- Added support for Farmer's Delight Refabricated 1.3.1/26.1.
+- Refactor builders and introduce RecipeRequiredBuilder (thanks, [EvanHsieh0415](https://github.com/EvanHsieh0415)!).
 
 
 ***

@@ -78,8 +78,18 @@ public class DelightDataGenerator implements DataProvider {
             tex.addProperty("layer0", modId + ":item/" + entry.getKey());
             model.add("textures", tex);
             futures.add(save(cache, "assets", modId, "models/item/" + entry.getKey() + ".json", model));
+            futures.add(save(cache, "assets", modId, "items/" + entry.getKey() + ".json", itemDef(modId, entry.getKey())));
         }
         return futures;
+    }
+
+    private JsonObject itemDef(String modId, String name) {
+        JsonObject def = new JsonObject();
+        JsonObject model = new JsonObject();
+        model.addProperty("type", "minecraft:model");
+        model.addProperty("model", modId + ":item/" + name);
+        def.add("model", model);
+        return def;
     }
 
     // Cabinet assets
@@ -102,6 +112,7 @@ public class DelightDataGenerator implements DataProvider {
             JsonObject item = new JsonObject();
             item.addProperty("parent", modId + ":block/" + name);
             futures.add(save(cache, "assets", modId, "models/item/" + name + ".json", item));
+            futures.add(save(cache, "assets", modId, "items/" + name + ".json", itemDef(modId, name)));
 
             // Blockstate
             futures.add(save(cache, "assets", modId, "blockstates/" + name + ".json", cabinetBlockstate(modId, name)));
@@ -316,6 +327,7 @@ public class DelightDataGenerator implements DataProvider {
             JsonObject item = new JsonObject();
             item.addProperty("parent", modId + ":block/" + name);
             futures.add(save(cache, "assets", modId, "models/item/" + name + ".json", item));
+            futures.add(save(cache, "assets", modId, "items/" + name + ".json", itemDef(modId, name)));
             futures.add(save(cache, "assets", modId, "blockstates/" + name + ".json", simpleBlockstate(modId, name)));
         }
 
@@ -326,6 +338,7 @@ public class DelightDataGenerator implements DataProvider {
             JsonObject item = new JsonObject();
             item.addProperty("parent", modId + ":block/" + name);
             futures.add(save(cache, "assets", modId, "models/item/" + name + ".json", item));
+            futures.add(save(cache, "assets", modId, "items/" + name + ".json", itemDef(modId, name)));
             futures.add(save(cache, "assets", modId, "blockstates/" + name + ".json", simpleBlockstate(modId, name)));
         }
 
@@ -378,6 +391,7 @@ public class DelightDataGenerator implements DataProvider {
             tex.addProperty("layer0", modId + ":item/" + food.name());
             item.add("textures", tex);
             futures.add(save(cache, "assets", modId, "models/item/" + food.name() + ".json", item));
+            futures.add(save(cache, "assets", modId, "items/" + food.name() + ".json", itemDef(modId, food.name())));
         }
         return futures;
     }

@@ -40,14 +40,14 @@ public class CabinetBuilder extends RecipeRequiredBuilder<CabinetBuilder> {
         final int fuel = burnTime;
 
         Supplier<Block> block = addon.registerBlock(name, () -> {
-            Block.Properties props = Block.Properties.ofFullCopy(Blocks.BARREL);
+            Block.Properties props = addon.defaultBlockProperties(name, Block.Properties.ofFullCopy(Blocks.BARREL));
             if (sound != null) props = props.sound(sound);
             return new DelightCabinetBlock(props);
         });
 
         addon.registerItem(name, () -> fuel > 0
-                ? new FuelBlockItem(block.get(), new Item.Properties(), fuel)
-                : new BlockItem(block.get(), new Item.Properties()));
+                ? new FuelBlockItem(block.get(), addon.defaultItemProperties(name), fuel)
+                : new BlockItem(block.get(), addon.defaultItemProperties(name)));
 
         addon.addCabinetBlock(block);
 

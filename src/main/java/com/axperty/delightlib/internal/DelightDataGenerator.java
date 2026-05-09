@@ -421,13 +421,13 @@ public class DelightDataGenerator implements DataProvider {
                 String sliceId = food.sliceItem() != null ?
                         net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(food.sliceItem().get()).toString() :
                         modId + ":" + food.name() + "_slice";
-                resItem.addProperty("id", sliceId);
+                resItem.addProperty("item", sliceId);
                 res.add("item", resItem);
                 result.add(res);
                 recipe.add("result", result);
 
                 JsonObject tool = new JsonObject();
-                tool.addProperty("tag", "c:tools/knife");
+                tool.addProperty("tag", "c:tools/knives");
                 recipe.add("tool", tool);
 
                 futures.add(save(cache, "data", modId, "recipes/cutting/" + food.name() + ".json", recipe));

@@ -56,22 +56,22 @@ public class CookingRecipeBuilder {
 
         JsonObject recipe = new JsonObject();
         recipe.addProperty("type", "farmersdelight:cooking");
-        if (experience > 0) recipe.addProperty("experience", experience);
+        recipe.addProperty("cookingtime", cookingTime);
+        recipe.addProperty("experience", experience);
         recipe.add("ingredients", ingredients);
         if (recipeBookTab != null && !recipeBookTab.isEmpty()) recipe.addProperty("recipe_book_tab", recipeBookTab);
 
         JsonObject result = new JsonObject();
         result.addProperty("count", resultCount);
-        result.addProperty("id", resultId);
+        result.addProperty("item", resultId);
         recipe.add("result", result);
 
         if (containerId != null) {
             JsonObject container = new JsonObject();
             container.addProperty("count", 1);
-            container.addProperty("id", containerId);
+            container.addProperty("item", containerId);
             recipe.add("container", container);
         }
-        if (cookingTime != 200) recipe.addProperty("cookingtime", cookingTime);
 
         addon.addRecipe("cooking/" + name, recipe);
     }

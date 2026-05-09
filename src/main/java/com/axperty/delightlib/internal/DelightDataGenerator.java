@@ -423,7 +423,9 @@ public class DelightDataGenerator implements DataProvider {
                 JsonObject recipe = new JsonObject();
                 recipe.addProperty("type", "farmersdelight:cutting");
                 JsonArray ingredients = new JsonArray();
-                ingredients.add(modId + ":" + food.name());
+                JsonObject ingredient = new JsonObject();
+                ingredient.addProperty("item", modId + ":" + food.name());
+                ingredients.add(ingredient);
                 recipe.add("ingredients", ingredients);
 
                 JsonArray result = new JsonArray();
@@ -438,7 +440,9 @@ public class DelightDataGenerator implements DataProvider {
                 result.add(res);
                 recipe.add("result", result);
 
-                recipe.addProperty("tool", "#c:tools/knife");
+                JsonObject tool = new JsonObject();
+                tool.addProperty("tag", "c:tools/knife");
+                recipe.add("tool", tool);
 
                 futures.add(save(cache, "data", modId, "recipe/cutting/" + food.name() + ".json", recipe));
             } else {

@@ -16,9 +16,9 @@ public class CookingRecipeBuilder {
     private String resultId;
     private int resultCount = 1;
     private String containerId = null;
-    private float experience = 0.0f;
+    private float experience = 1.0f;
     private int cookingTime = 200;
-    private String recipeBookTab = "misc";
+    private String recipeBookTab = "meals";
 
     public CookingRecipeBuilder(DelightAddon addon, String name) {
         this.addon = addon;
@@ -26,12 +26,16 @@ public class CookingRecipeBuilder {
     }
 
     public CookingRecipeBuilder addIngredient(String itemId) {
-        ingredients.add(itemId);
+        JsonObject ingredient = new JsonObject();
+        ingredient.addProperty("item", itemId);
+        ingredients.add(ingredient);
         return this;
     }
 
     public CookingRecipeBuilder addTagIngredient(String tag) {
-        ingredients.add("#" + tag);
+        JsonObject ingredient = new JsonObject();
+        ingredient.addProperty("tag", tag);
+        ingredients.add(ingredient);
         return this;
     }
 
@@ -54,7 +58,7 @@ public class CookingRecipeBuilder {
 
         JsonObject recipe = new JsonObject();
         recipe.addProperty("type", "farmersdelight:cooking");
-        if (experience > 0) recipe.addProperty("experience", experience);
+        recipe.addProperty("experience", experience);
         recipe.add("ingredients", ingredients);
         if (recipeBookTab != null && !recipeBookTab.isEmpty()) recipe.addProperty("recipe_book_tab", recipeBookTab);
 
@@ -69,7 +73,7 @@ public class CookingRecipeBuilder {
             container.addProperty("id", containerId);
             recipe.add("container", container);
         }
-        if (cookingTime != 200) recipe.addProperty("cookingtime", cookingTime);
+        recipe.addProperty("cookingtime", cookingTime);
 
         addon.addRecipe("cooking/" + name, recipe);
     }

@@ -2,13 +2,13 @@ package com.axperty.delightlib.api.builder;
 
 import com.axperty.delightlib.api.DelightAddon;
 import com.axperty.delightlib.api.PlaceableFoodInfo;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import vectorwing.farmersdelight.common.block.FeastBlock;
 import vectorwing.farmersdelight.common.block.PieBlock;
-import vectorwing.farmersdelight.common.item.PlaceableItem;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -86,6 +86,6 @@ public class PlaceableFoodBuilder {
             }
         }
         Supplier<Block> finalBlock = block;
-        return addon.registerItem(name, () -> new PlaceableItem(finalBlock.get(), new Item.Properties().stacksTo(stack)));
+        return addon.registerItem(name, () -> new BlockItem(finalBlock.get(), new Item.Properties().stacksTo(stack)));
     }
 }

@@ -15,11 +15,10 @@ public class PlaceableFoodBuilder {
     private final DelightAddon addon;
     private final String name;
     private int maxStackSize = 1;
-    private boolean isPie = false;
     private Supplier<Item> sliceItem;
-    private boolean isFeast = false;
     private Supplier<Item> servingItem;
     private Supplier<Item> feastOutputItem;
+    private PlaceableFoodInfo.FoodType foodType = null;
 
     public PlaceableFoodBuilder(DelightAddon addon, String name) {
         this.addon = addon;
@@ -27,7 +26,7 @@ public class PlaceableFoodBuilder {
     }
 
     public PlaceableFoodBuilder pie(Supplier<Item> sliceItem) {
-        this.isPie = true; this.isFeast = false;
+        foodType = PlaceableFoodInfo.FoodType.PIE;
         this.sliceItem = sliceItem;
         return this;
     }
@@ -36,8 +35,12 @@ public class PlaceableFoodBuilder {
         return pie(addon.getItem(sliceItemName));
     }
 
+    public PlaceableFoodBuilder pie(FoodBuilder foodBuilder) {
+        return pie(foodBuilder.build());
+    }
+
     public PlaceableFoodBuilder feast(Supplier<Item> servingItem) {
-        this.isFeast = true; this.isPie = false;
+        foodType = PlaceableFoodInfo.FoodType.FEAST;
         this.servingItem = servingItem;
         return this;
     }
@@ -46,10 +49,15 @@ public class PlaceableFoodBuilder {
         return feast(addon.getItem(servingItemName));
     }
 
+    public PlaceableFoodBuilder feast(FoodBuilder foodBuilder) {
+        return feast(foodBuilder.build());
+    }
+
     public PlaceableFoodBuilder feastOutput(Supplier<Item> item) {
         this.feastOutputItem = item;
         return this;
     }
+
     public PlaceableFoodBuilder feastOutput(String itemName) {
         return feastOutput(addon.getItem(itemName));
     }
@@ -57,23 +65,25 @@ public class PlaceableFoodBuilder {
     public PlaceableFoodBuilder stacksTo(int size) { this.maxStackSize = size; return this; }
 
     public Supplier<Item> build() {
-        if (!isPie && !isFeast) {
+        if (foodType == null) {
             throw new IllegalStateException("PlaceableFoodBuilder '" + name + "' must use .pie() or .feast()");
         }
-        addon.trackPlaceableFood(name, isPie ? PlaceableFoodInfo.FoodType.PIE : PlaceableFoodInfo.FoodType.FEAST, sliceItem, servingItem, feastOutputItem);
+        addon.trackPlaceableFood(name, foodType, sliceItem, servingItem, feastOutputItem);
         final int stack = maxStackSize;
 
-        Supplier<Block> block;
-        if (isPie) {
-            final Supplier<Item> slice = sliceItem;
-            block = addon.registerBlock(name, () -> new PieBlock(Block.Properties.copy(Blocks.CAKE), slice));
-            addon.addCutoutBlock(block);
-        } else {
-            final Supplier<Item> serving = servingItem;
-            final Supplier<Item> output = feastOutputItem;
-            block = addon.registerBlock(name, () -> new FeastBlock(Block.Properties.copy(Blocks.CAKE), serving, output != null));
-            addon.addCutoutBlock(block);
+        Supplier<Block> block = null;
+        switch (foodType) {
+            case PIE -> {
+                final Supplier<Item> slice = sliceItem;
+                block = addon.registerBlock(name, () -> new PieBlock(Block.Properties.copy(Blocks.CAKE), slice));
+            }
+            case FEAST -> {
+                final Supplier<Item> serving = servingItem;
+                final Supplier<Item> output = feastOutputItem;
+                block = addon.registerBlock(name, () -> new FeastBlock(Block.Properties.copy(Blocks.CAKE), serving, output != null));
+            }
         }
-        return addon.registerItem(name, () -> new BlockItem(block.get(), new Item.Properties().stacksTo(stack)));
+        Supplier<Block> finalBlock = block;
+        return addon.registerItem(name, () -> new BlockItem(finalBlock.get(), new Item.Properties().stacksTo(stack)));
     }
 }

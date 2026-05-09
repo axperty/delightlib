@@ -84,6 +84,7 @@ public class PlaceableFoodBuilder {
             }
         }
         Supplier<Block> finalBlock = block;
+        addon.addCutoutBlock(finalBlock);
         return addon.registerItem(name, () -> new BlockItem(finalBlock.get(), new Item.Properties().stacksTo(stack)));
     }
 }

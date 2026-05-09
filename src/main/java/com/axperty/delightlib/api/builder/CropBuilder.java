@@ -44,6 +44,7 @@ public class CropBuilder {
 
         Supplier<Block> cropBlock = addon.registerBlock(blockName, () ->
                 new DelightCropBlock(Block.Properties.copy(Blocks.WHEAT), () -> seedHolder.get().get()));
+        addon.addCutoutBlock(cropBlock);
 
         Supplier<Item> cropItem;
         Item.Properties properties = new Item.Properties();

@@ -44,14 +44,13 @@ public class FoodBuilder {
     public FoodBuilder alwaysEdible() { this.alwaysEdible = true; return this; }
 
     public FoodBuilder bowlFood() {
-        internalStacksTo(16);
-        return craftRemainder(Items.BOWL);
+        return internalStacksTo(16)
+                .craftRemainder(Items.BOWL);
     }
 
     public FoodBuilder drinkable() {
         this.isDrinkable = true;
-        internalStacksTo(16);
-        return craftRemainder(Items.GLASS_BOTTLE);
+        return internalStacksTo(16).craftRemainder(Items.GLASS_BOTTLE);
     }
 
     public FoodBuilder craftRemainder(Item remainder) {
@@ -65,6 +64,7 @@ public class FoodBuilder {
         return this;
     }
     public FoodBuilder stacksTo(int size) {
+        isStackSizeSetManually = true;
         this.maxStackSize = size;
         return this;
     }

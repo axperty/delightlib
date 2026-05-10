@@ -73,7 +73,7 @@ public class FoodBuilder {
      *
      * @return this builder for chaining
      */
-    public FoodBuilder alwaysEat() {
+    public FoodBuilder alwaysEdible() {
         this.alwaysEdible = true;
         return this;
     }

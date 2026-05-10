@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.function.Supplier;
 
-public class DelightAddon {
+public class DelightAddon implements DelightApi {
     private static final Logger LOGGER = LoggerFactory.getLogger(DelightAddon.class);
 
     private final String modId;
@@ -58,14 +58,21 @@ public class DelightAddon {
         this.creativeTabs = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, modId);
     }
 
-    public static DelightAddon create(String modId, IEventBus modEventBus) {
+    @Deprecated
+    public static DelightApi create(String modId, IEventBus modEventBus) {
+        return DelightApi.create(modId, modEventBus);
+    }
+
+    static DelightAddon internalCreate(String modId, IEventBus modEventBus) {
         DelightAddon addon = new DelightAddon(modId, modEventBus);
         addon.init();
         LOGGER.info("Delight Lib initialized for: {}", modId);
         return addon;
     }
 
-    public DelightAddon withCreativeTab(String title, Supplier<ItemStack> icon) {
+    @Override
+    /* {@inheritDoc} */
+    public DelightApi withCreativeTab(String title, Supplier<ItemStack> icon) {
         creativeTabs.register("tab", () -> CreativeModeTab.builder()
                 .title(Component.literal(title))
                 .icon(icon != null ? icon : () -> ItemStack.EMPTY)
@@ -77,16 +84,66 @@ public class DelightAddon {
 
     // Builder factories
 
-    public KnifeBuilder knife(String name, Tier tier) { return new KnifeBuilder(this, name, tier); }
-    public FoodBuilder food(String name) { return new FoodBuilder(this, name); }
-    public PlaceableFoodBuilder placeableFood(String name) { return new PlaceableFoodBuilder(this, name); }
-    public CabinetBuilder cabinet(String name) { return new CabinetBuilder(this, name); }
-    public CookingRecipeBuilder cookingRecipe(String name) { return new CookingRecipeBuilder(this, name); }
-    public ShapedRecipeBuilder shapedRecipe(String name) { return new ShapedRecipeBuilder(this, name); }
-    public ShapelessRecipeBuilder shapelessRecipe(String name) { return new ShapelessRecipeBuilder(this, name); }
-    public CrateBuilder crate(String name) { return new CrateBuilder(this, name); }
-    public BagBuilder bag(String name) { return new BagBuilder(this, name); }
-    public CropBuilder crop(String name) { return new CropBuilder(this, name); }
+    @Override
+    /* {@inheritDoc} */
+    public KnifeBuilder knife(String name, Tier tier) {
+        return new KnifeBuilder(this, name, tier);
+    }
+
+    @Override
+    /* {@inheritDoc} */
+    public FoodBuilder food(String name) {
+        return new FoodBuilder(this, name);
+    }
+
+    @Override
+    /* {@inheritDoc} */
+    public PlaceableFoodBuilder placeableFood(String name) {
+        return new PlaceableFoodBuilder(this, name);
+    }
+
+
+    @Override
+    /* {@inheritDoc} */
+    public CookingRecipeBuilder cookingRecipe(String name) {
+        return new CookingRecipeBuilder(this, name);
+    }
+
+    @Override
+    /* {@inheritDoc} */
+    public ShapedRecipeBuilder shapedRecipe(String name) {
+        return new ShapedRecipeBuilder(this, name);
+    }
+
+    @Override
+    /* {@inheritDoc} */
+    public ShapelessRecipeBuilder shapelessRecipe(String name) {
+        return new ShapelessRecipeBuilder(this, name);
+    }
+
+    @Override
+    /* {@inheritDoc} */
+    public CabinetBuilder cabinet(String name) {
+        return new CabinetBuilder(this, name);
+    }
+
+    @Override
+    /* {@inheritDoc} */
+    public CrateBuilder crate(String name) {
+        return new CrateBuilder(this, name);
+    }
+
+    @Override
+    /* {@inheritDoc} */
+    public BagBuilder bag(String name) {
+        return new BagBuilder(this, name);
+    }
+
+    @Override
+    /* {@inheritDoc} */
+    public CropBuilder crop(String name) {
+        return new CropBuilder(this, name);
+    }
 
     // Content tracking
 

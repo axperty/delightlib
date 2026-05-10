@@ -5,12 +5,10 @@ import com.axperty.delightlib.api.PlaceableFoodInfo;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import vectorwing.farmersdelight.common.block.FeastBlock;
 import vectorwing.farmersdelight.common.block.PieBlock;
 import vectorwing.farmersdelight.common.item.PlaceableItem;
 
-import java.util.Objects;
 import java.util.function.Supplier;
 
 public class PlaceableFoodBuilder {
@@ -64,7 +62,10 @@ public class PlaceableFoodBuilder {
         return feastOutput(addon.getItem(itemName));
     }
 
-    public PlaceableFoodBuilder stacksTo(int size) { this.maxStackSize = size; return this; }
+    public PlaceableFoodBuilder stacksTo(int size) {
+        this.maxStackSize = size;
+        return this;
+    }
 
     public Supplier<Item> build() {
         if (foodType == null) {

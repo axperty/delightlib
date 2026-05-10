@@ -81,7 +81,7 @@ public class ShapedRecipeBuilder {
      *
      * @param itemId the ID of the item to set as the result of the recipe, in the format "modid:itemname"
      * @param count  the count of the result item to produce when the recipe is crafted
-     * @return
+     * @return this builder for chaining
      */
     public ShapedRecipeBuilder result(String itemId, int count) {
         this.resultId = itemId;

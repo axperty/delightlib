@@ -96,7 +96,7 @@ public class CookingRecipeBuilder {
     }
 
     /**
-     * Sets the container item that will be returned when the recipe is crafted using an Item supplier. This is a convenience method to avoid having to call builtInRegistryHolder().key().location() on the item yourself.
+     * Set the experience given to the player when they craft this recipe. This is a float value, where 1.0 is equal to 1 experience point. By default, recipes give 0 experience, but you can set this to a different value if you want the recipe to give experience when crafted. Note that the experience given by the recipe does not depend on the cooking time, so you can have a recipe that cooks very quickly but still gives a lot of experience, or vice versa.
      *
      * @param xp the amount of experience to give the player when they craft this recipe. This is a float value, where 1.0 is equal to 1 experience point. By default, recipes give 0 experience.
      * @return this builder for chaining

@@ -60,7 +60,7 @@ public class ShapelessRecipeBuilder {
      *
      * @param itemId the ID of the item to set as the result, in the format "modid:itemname"
      * @param count  the count of the result item to produce. For example, if you call result("minecraft:iron_sword", 2), then the resulting recipe will produce 2 iron swords when crafted.
-     * @return
+     * @return this builder for chaining
      */
     public ShapelessRecipeBuilder result(String itemId, int count) {
         this.resultId = itemId;

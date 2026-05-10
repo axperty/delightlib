@@ -60,6 +60,11 @@ public class DelightAddon implements DelightApi {
         this.creativeTabs = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, modId);
     }
 
+    @Deprecated
+    public static DelightApi create(String modId, IEventBus modEventBus) {
+        return DelightApi.create(modId, modEventBus);
+    }
+
     static DelightAddon internalCreate(String modId, IEventBus modEventBus) {
         DelightAddon addon = new DelightAddon(modId, modEventBus);
         addon.init();
@@ -69,7 +74,7 @@ public class DelightAddon implements DelightApi {
 
     @Override
     /* {@inheritDoc} */
-    public DelightAddon withCreativeTab(String title, Supplier<ItemStack> icon) {
+    public DelightApi withCreativeTab(String title, Supplier<ItemStack> icon) {
         creativeTabs.register("tab", () -> CreativeModeTab.builder()
                 .title(Component.literal(title))
                 .icon(icon != null ? icon : () -> ItemStack.EMPTY)

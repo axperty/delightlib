@@ -26,7 +26,7 @@ public interface DelightApi {
      * @param icon  a supplier that provides the icon for the creative tab. This should return an ItemStack that represents the icon you want to use for the creative tab. It can be an item from your mod or any other item in the game.
      * @return this API instance for chaining. Note that you should call this method before registering any items or blocks, as it will set the creative tab for all content registered through this API. If you call it after registering some content, only the content registered after the call will be affected.
      */
-    DelightAddon withCreativeTab(String title, Supplier<ItemStack> icon);
+    DelightApi withCreativeTab(String title, Supplier<ItemStack> icon);
 
     // Builder factories
 

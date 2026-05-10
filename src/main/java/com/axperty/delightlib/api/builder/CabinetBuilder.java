@@ -33,9 +33,6 @@ public class CabinetBuilder extends RecipeRequiredBuilder<CabinetBuilder> {
 
     @Override
     protected Supplier<Block> doBuild() {
-        if (recipeConfig == null) {
-            throw new IllegalStateException("Cabinet '" + name + "' requires a shaped recipe. Call .recipe() before .build().");
-        }
         addon.trackCabinet(name);
         final SoundType sound = soundType;
         final int fuel = burnTime;

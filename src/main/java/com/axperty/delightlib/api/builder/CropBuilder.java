@@ -24,6 +24,13 @@ public class CropBuilder {
         this.name = name;
     }
 
+    /**
+     * Makes the crop's item form edible, with the given nutrition and saturation values.
+     *
+     * @param nutrition  the amount of hunger points restored by the crop item
+     * @param saturation the saturation modifier of the crop item
+     * @return this builder for chaining
+     */
     public CropBuilder asFood(int nutrition, float saturation) {
         this.isFood = true;
         this.nutrition = nutrition;
@@ -31,6 +38,11 @@ public class CropBuilder {
         return this;
     }
 
+    /**
+     * Makes the crop's seed item the same as the crop item. This means that when you break the crop block, it will drop the crop item instead of a separate seed item. This is useful for crops that don't have a separate seed item and are planted using the crop item itself, like carrots or potatoes.
+     *
+     * @return this builder for chaining
+     */
     public CropBuilder seedIsItem() {
         this.seedIsItem = true;
         return this;
@@ -44,7 +56,6 @@ public class CropBuilder {
 
         Supplier<Block> cropBlock = addon.registerBlock(blockName, () ->
                 new DelightCropBlock(Block.Properties.ofFullCopy(Blocks.WHEAT), () -> seedHolder.get().get()));
-        addon.addCutoutBlock(cropBlock);
 
         Supplier<Item> cropItem;
         Item.Properties properties = new Item.Properties();

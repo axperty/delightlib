@@ -4,10 +4,10 @@ import com.axperty.delightlib.api.DelightAddon;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class BagBuilder extends RecipeRequiredBuilder<BagBuilder> {
@@ -26,13 +26,10 @@ public class BagBuilder extends RecipeRequiredBuilder<BagBuilder> {
 
     @Override
     protected Supplier<Block> doBuild() {
-        if (recipeConfig == null) {
-            throw new IllegalStateException("Bag '" + name + "' requires a shaped recipe. Call .recipe() before .build().");
-        }
         addon.trackBag(name);
 
         Supplier<Block> block = addon.registerBlock(name, () ->
-                new Block(BlockBehaviour.Properties.of().sound(SoundType.WOOL).strength(0.8f)));
+                new Block(BlockBehaviour.Properties.copy(Blocks.WHITE_WOOL).sound(SoundType.WOOL).strength(0.8f)));
 
         addon.registerItem(name, () -> new BlockItem(block.get(), new Item.Properties()));
 

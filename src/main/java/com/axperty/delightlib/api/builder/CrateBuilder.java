@@ -4,6 +4,7 @@ import com.axperty.delightlib.api.DelightAddon;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
@@ -26,13 +27,10 @@ public class CrateBuilder extends RecipeRequiredBuilder<CrateBuilder> {
 
     @Override
     protected Supplier<Block> doBuild() {
-        if (recipeConfig == null) {
-            throw new IllegalStateException("Crate '" + name + "' requires a shaped recipe. Call .recipe() before .build().");
-        }
         addon.trackCrate(name);
 
         Supplier<Block> block = addon.registerBlock(name, () ->
-                new Block(BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(2.0f, 3.0f)));
+                new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).sound(SoundType.WOOD).strength(2.0f, 3.0f)));
 
         addon.registerItem(name, () -> new BlockItem(block.get(), new Item.Properties()));
 

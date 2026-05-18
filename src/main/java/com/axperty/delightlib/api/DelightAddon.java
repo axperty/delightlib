@@ -75,6 +75,7 @@ public class DelightAddon implements DelightApi {
         return this;
     }
 
+    @Override
     public void build() {
         if (tabTitle != null) {
             tab = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, Identifier.fromNamespaceAndPath(modId, "tab"), 

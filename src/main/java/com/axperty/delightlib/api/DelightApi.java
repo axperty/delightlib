@@ -109,4 +109,9 @@ public interface DelightApi {
      * @return a CropBuilder to further configure and build the crop's seed item, crop block, and crop item
      */
     CropBuilder crop(String name);
+
+    /**
+     * Finalizes the addon registration process. In Fabric, this method must be called at the end of your registration block to register the creative tab, block entities (like cabinets), and other complex content that relies on all items and blocks being built first.
+     */
+    void build();
 }

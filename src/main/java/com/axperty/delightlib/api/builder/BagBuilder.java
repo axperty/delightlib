@@ -25,9 +25,6 @@ public class BagBuilder extends RecipeRequiredBuilder<BagBuilder> {
 
     @Override
     protected Supplier<Block> doBuild() {
-        if (recipeConfig == null) {
-            throw new IllegalStateException("Bag '" + name + "' requires a shaped recipe. Call .recipe() before .build().");
-        }
         addon.trackBag(name);
 
         Supplier<Block> block = addon.registerBlock(name, () ->

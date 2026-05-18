@@ -2,12 +2,10 @@ package com.axperty.delightlib.api.builder;
 
 import com.axperty.delightlib.api.DelightAddon;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class CrateBuilder extends RecipeRequiredBuilder<CrateBuilder> {
@@ -26,9 +24,6 @@ public class CrateBuilder extends RecipeRequiredBuilder<CrateBuilder> {
 
     @Override
     protected Supplier<Block> doBuild() {
-        if (recipeConfig == null) {
-            throw new IllegalStateException("Crate '" + name + "' requires a shaped recipe. Call .recipe() before .build().");
-        }
         addon.trackCrate(name);
 
         Supplier<Block> block = addon.registerBlock(name, () ->

@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.function.Supplier;
 
-public class DelightAddon {
+public class DelightAddon implements DelightApi {
     private static final Logger LOGGER = LoggerFactory.getLogger(DelightAddon.class);
 
     private final String modId;
@@ -56,13 +56,20 @@ public class DelightAddon {
         this.modId = modId;
     }
 
-    public static DelightAddon create(String modId) {
+    @Deprecated
+    public static DelightApi create(String modId) {
+        return DelightApi.create(modId);
+    }
+
+    static DelightAddon internalCreate(String modId) {
         DelightAddon addon = new DelightAddon(modId);
         LOGGER.info("Delight Lib initialized for: {}", modId);
         return addon;
     }
 
-    public DelightAddon withCreativeTab(String title, Supplier<ItemStack> icon) {
+    @Override
+    /* {@inheritDoc} */
+    public DelightApi withCreativeTab(String title, Supplier<ItemStack> icon) {
         this.tabTitle = title;
         this.tabIcon = icon != null ? icon : () -> ItemStack.EMPTY;
         return this;
@@ -103,15 +110,35 @@ public class DelightAddon {
 
     // Builder factories
 
+    @Override
+    /* {@inheritDoc} */
     public KnifeBuilder knife(String name, ToolMaterial tier) { return new KnifeBuilder(this, name, tier); }
+    @Override
+    /* {@inheritDoc} */
     public FoodBuilder food(String name) { return new FoodBuilder(this, name); }
+    @Override
+    /* {@inheritDoc} */
     public PlaceableFoodBuilder placeableFood(String name) { return new PlaceableFoodBuilder(this, name); }
+    @Override
+    /* {@inheritDoc} */
     public CabinetBuilder cabinet(String name) { return new CabinetBuilder(this, name); }
+    @Override
+    /* {@inheritDoc} */
     public CookingRecipeBuilder cookingRecipe(String name) { return new CookingRecipeBuilder(this, name); }
+    @Override
+    /* {@inheritDoc} */
     public ShapedRecipeBuilder shapedRecipe(String name) { return new ShapedRecipeBuilder(this, name); }
+    @Override
+    /* {@inheritDoc} */
     public ShapelessRecipeBuilder shapelessRecipe(String name) { return new ShapelessRecipeBuilder(this, name); }
+    @Override
+    /* {@inheritDoc} */
     public CrateBuilder crate(String name) { return new CrateBuilder(this, name); }
+    @Override
+    /* {@inheritDoc} */
     public BagBuilder bag(String name) { return new BagBuilder(this, name); }
+    @Override
+    /* {@inheritDoc} */
     public CropBuilder crop(String name) { return new CropBuilder(this, name); }
 
     // Content tracking

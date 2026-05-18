@@ -2,7 +2,7 @@ package com.axperty.delightlib.api;
 
 import com.axperty.delightlib.api.builder.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.Tiers;
 
 import java.util.function.Supplier;
 
@@ -35,7 +35,7 @@ public interface DelightApi {
      * @param tier the tier of the knife, which determines its durability and mining level. This is required for knives to function properly in slicing placeable foods, but you can use a custom tier with 0 mining level and durability if you just want a weapon-like item without the slicing functionality.
      * @return a KnifeBuilder to further configure and build the knife item
      */
-    KnifeBuilder knife(String name, Tier tier);
+    KnifeBuilder knife(String name, Tiers tier);
 
     /**
      * Starts building a new food item. This is a simple item that can be eaten by the player, and can also be used as an ingredient in placeable foods and cooking recipes. It does not have any special functionality on its own, but it can be referenced by other builders to create more complex content.

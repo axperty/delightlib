@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.function.Supplier;
 
-public class DelightAddon implements DelightApi {
+public class DelightAddon {
     private static final Logger LOGGER = LoggerFactory.getLogger(DelightAddon.class);
 
     private final String modId;
@@ -60,21 +60,14 @@ public class DelightAddon implements DelightApi {
         this.creativeTabs = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, modId);
     }
 
-    @Deprecated
-    public static DelightApi create(String modId, IEventBus modEventBus) {
-        return DelightApi.create(modId, modEventBus);
-    }
-
-    static DelightAddon internalCreate(String modId, IEventBus modEventBus) {
+    public static DelightAddon create(String modId, IEventBus modEventBus) {
         DelightAddon addon = new DelightAddon(modId, modEventBus);
         addon.init();
         LOGGER.info("Delight Lib initialized for: {}", modId);
         return addon;
     }
 
-    @Override
-    /* {@inheritDoc} */
-    public DelightApi withCreativeTab(String title, Supplier<ItemStack> icon) {
+    public DelightAddon withCreativeTab(String title, Supplier<ItemStack> icon) {
         creativeTabs.register("tab", () -> CreativeModeTab.builder()
                 .title(Component.literal(title))
                 .icon(icon != null ? icon : () -> ItemStack.EMPTY)
@@ -86,66 +79,16 @@ public class DelightAddon implements DelightApi {
 
     // Builder factories
 
-    @Override
-    /* {@inheritDoc} */
-    public KnifeBuilder knife(String name, Tier tier) {
-        return new KnifeBuilder(this, name, tier);
-    }
-
-    @Override
-    /* {@inheritDoc} */
-    public FoodBuilder food(String name) {
-        return new FoodBuilder(this, name);
-    }
-
-    @Override
-    /* {@inheritDoc} */
-    public PlaceableFoodBuilder placeableFood(String name) {
-        return new PlaceableFoodBuilder(this, name);
-    }
-
-
-    @Override
-    /* {@inheritDoc} */
-    public CookingRecipeBuilder cookingRecipe(String name) {
-        return new CookingRecipeBuilder(this, name);
-    }
-
-    @Override
-    /* {@inheritDoc} */
-    public ShapedRecipeBuilder shapedRecipe(String name) {
-        return new ShapedRecipeBuilder(this, name);
-    }
-
-    @Override
-    /* {@inheritDoc} */
-    public ShapelessRecipeBuilder shapelessRecipe(String name) {
-        return new ShapelessRecipeBuilder(this, name);
-    }
-
-    @Override
-    /* {@inheritDoc} */
-    public CabinetBuilder cabinet(String name) {
-        return new CabinetBuilder(this, name);
-    }
-
-    @Override
-    /* {@inheritDoc} */
-    public CrateBuilder crate(String name) {
-        return new CrateBuilder(this, name);
-    }
-
-    @Override
-    /* {@inheritDoc} */
-    public BagBuilder bag(String name) {
-        return new BagBuilder(this, name);
-    }
-
-    @Override
-    /* {@inheritDoc} */
-    public CropBuilder crop(String name) {
-        return new CropBuilder(this, name);
-    }
+    public KnifeBuilder knife(String name, Tier tier) { return new KnifeBuilder(this, name, tier); }
+    public FoodBuilder food(String name) { return new FoodBuilder(this, name); }
+    public PlaceableFoodBuilder placeableFood(String name) { return new PlaceableFoodBuilder(this, name); }
+    public CabinetBuilder cabinet(String name) { return new CabinetBuilder(this, name); }
+    public CookingRecipeBuilder cookingRecipe(String name) { return new CookingRecipeBuilder(this, name); }
+    public ShapedRecipeBuilder shapedRecipe(String name) { return new ShapedRecipeBuilder(this, name); }
+    public ShapelessRecipeBuilder shapelessRecipe(String name) { return new ShapelessRecipeBuilder(this, name); }
+    public CrateBuilder crate(String name) { return new CrateBuilder(this, name); }
+    public BagBuilder bag(String name) { return new BagBuilder(this, name); }
+    public CropBuilder crop(String name) { return new CropBuilder(this, name); }
 
     // Content tracking
 
@@ -227,49 +170,17 @@ public class DelightAddon implements DelightApi {
 
     // Getters
 
-    public String getModId() {
-        return modId;
-    }
-
-    public List<String> getKnifeNames() {
-        return Collections.unmodifiableList(knifeNames);
-    }
-
-    public List<String> getCabinetNames() {
-        return Collections.unmodifiableList(cabinetNames);
-    }
-
-    public List<String> getCrateNames() {
-        return Collections.unmodifiableList(crateNames);
-    }
-
-    public List<String> getBagNames() {
-        return Collections.unmodifiableList(bagNames);
-    }
-
-    public List<String> getBlockNames() {
-        return Collections.unmodifiableList(blockNames);
-    }
-
-    public Map<String, String> getItemModelParents() {
-        return Collections.unmodifiableMap(itemModelParents);
-    }
-
-    public Map<String, String> getLangEntries() {
-        return Collections.unmodifiableMap(langEntries);
-    }
-
-    public Map<String, JsonObject> getRecipes() {
-        return Collections.unmodifiableMap(recipes);
-    }
-
-    public List<CropInfo> getCropInfos() {
-        return Collections.unmodifiableList(cropInfos);
-    }
-
-    public List<PlaceableFoodInfo> getPlaceableFoodInfos() {
-        return Collections.unmodifiableList(placeableFoodInfos);
-    }
+    public String getModId() { return modId; }
+    public List<String> getKnifeNames() { return Collections.unmodifiableList(knifeNames); }
+    public List<String> getCabinetNames() { return Collections.unmodifiableList(cabinetNames); }
+    public List<String> getCrateNames() { return Collections.unmodifiableList(crateNames); }
+    public List<String> getBagNames() { return Collections.unmodifiableList(bagNames); }
+    public List<String> getBlockNames() { return Collections.unmodifiableList(blockNames); }
+    public Map<String, String> getItemModelParents() { return Collections.unmodifiableMap(itemModelParents); }
+    public Map<String, String> getLangEntries() { return Collections.unmodifiableMap(langEntries); }
+    public Map<String, JsonObject> getRecipes() { return Collections.unmodifiableMap(recipes); }
+    public List<CropInfo> getCropInfos() { return Collections.unmodifiableList(cropInfos); }
+    public List<PlaceableFoodInfo> getPlaceableFoodInfos() { return Collections.unmodifiableList(placeableFoodInfos); }
 
     // Internal
 
@@ -296,14 +207,14 @@ public class DelightAddon implements DelightApi {
         });
 
         modEventBus.addListener((net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent event) ->
-                event.enqueueWork(() -> cabinetBlocks.forEach(s -> {
-                    if (s.get() instanceof DelightCabinetBlock cab) cab.setBlockEntityType(cabinetBlockEntityType);
-                }))
+            event.enqueueWork(() -> cabinetBlocks.forEach(s -> {
+                if (s.get() instanceof DelightCabinetBlock cab) cab.setBlockEntityType(cabinetBlockEntityType);
+            }))
         );
 
         modEventBus.addListener((GatherDataEvent event) ->
-                event.getGenerator().addProvider(true,
-                        new DelightDataGenerator(event.getGenerator().getPackOutput(), this))
+            event.getGenerator().addProvider(true,
+                    new DelightDataGenerator(event.getGenerator().getPackOutput(), this))
         );
     }
 

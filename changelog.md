@@ -2,12 +2,11 @@
 
 ***
 
-### 🛠️ Minor Changes:
+### ✨ What's New:
 
-- Fixed knifes not working correctly.
-- Fixed cooking recipes not working correctly.
-- Fixed cabinets not registering tags for Farmer's Delight cabinets.
-- Fixed pies not dropping slices when right-clicked with a knife.
+- Refactor builders and introduce `RecipeRequiredBuilder` (thanks, [EvanHsieh0415](https://github.com/EvanHsieh0415)!).
+- Add Javadoc for public API, refactor public api interface for access (thanks, [EvanHsieh0415](https://github.com/EvanHsieh0415)!).
+
 ***
 
 ### 📝 Feedback and Support:

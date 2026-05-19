@@ -2,10 +2,9 @@
 
 ***
 
-### ✨ What's New:
+### 🛠️ Minor Changes:
 
-- Refactor builders and introduce `RecipeRequiredBuilder` (thanks, [EvanHsieh0415](https://github.com/EvanHsieh0415)!).
-- Add Javadoc for public API, refactor public api interface for access (thanks, [EvanHsieh0415](https://github.com/EvanHsieh0415)!).
+- Fixed crops and placeable food items not having a transparent texture background.
 
 ***
 

@@ -8,10 +8,10 @@ modId="${mod_id}"
 version="${mod_version}"
 displayName="${mod_name}"
 displayURL = "https://github.com/axperty/delightlib"
-logoFile="assets/delightlib/logo.png"
+logoFile="assets/${mod_id}/logo.png"
 logoBlur = false
 authors="${mod_authors}"
-description="A library mod for Farmer's Delight that aims to make other add-ons easily."
+description="${mod_description}"
 
 [[dependencies.${mod_id}]]
 modId="minecraft"

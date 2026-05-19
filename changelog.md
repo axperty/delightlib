@@ -2,10 +2,10 @@
 
 ***
 
-### 🛠️ Minor Changes:
+### ✨ What's New:
 
-- Fixed issues when cutting a `.pie()` food block with a knife.
-- Fixed issues with recipes.
+- Refactor builders and introduce `RecipeRequiredBuilder` (thanks, [EvanHsieh0415](https://github.com/EvanHsieh0415)!).
+- Add Javadoc for public API, refactor public api interface for access (thanks, [EvanHsieh0415](https://github.com/EvanHsieh0415)!).
 
 ***
 

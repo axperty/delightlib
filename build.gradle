@@ -24,7 +24,7 @@ dependencies {
 
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-    modImplementation "curse.maven:farmers-delight-refabricated-993166:7919003"
+    modImplementation "curse.maven:farmers-delight-refabricated-993166:7660064"
 }
 
 def expandProps = [

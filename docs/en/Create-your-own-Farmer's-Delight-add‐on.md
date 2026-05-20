@@ -1,4 +1,8 @@
-## Quick Links
+![Delight Lib](https://cdn.modrinth.com/data/rmDY6fYt/images/5d6afc0c897d26557b68c4b6ae51872d42b0ae89.png)
+
+***
+
+# Create your own Farmer's Delight add-on
 
 ### Getting Started
 

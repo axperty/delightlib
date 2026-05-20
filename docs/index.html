@@ -2,21 +2,87 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Delight Lib Documentation</title>
+    <title>Delight Lib Wiki</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.css" id="theme-light">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css" id="theme-dark" media="(prefers-color-scheme: dark)">
+
+    <style>
+        :root {
+            --base-font-size: 16px;
+            --theme-color: #5c6bc0;
+            --cover-background: #fafafa;
+            --sidebar-width: 280px;
+        }
+
+        img[alt="Delight Lib"] {
+            display: block;
+            margin: 2rem auto;
+            max-width: 200px;
+            border-radius: 12px;
+        }
+
+        .lang-switcher {
+            display: flex;
+            gap: 15px;
+            margin: 2rem 0;
+        }
+
+        .lang-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--theme-color);
+            border-radius: 6px;
+            text-decoration: none !important;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover {
+            background-color: var(--theme-color);
+            color: white !important;
+        }
+    </style>
 </head>
 <body>
-<div id="app">Loading...</div>
+<div id="app">Loading documentation...</div>
+
 <script>
     window.$docsify = {
         name: 'Delight Lib',
         repo: 'axperty/delightlib',
         loadSidebar: true,
-        subMaxLevel: 2
+        auto2top: true,
+        maxLevel: 3,
+        subMaxLevel: 2,
+        nameLink: '#/',
+
+        darklightTheme: {
+            siteFont: 'Source Sans Pro, Helvetica Neue, Arial, sans-serif',
+            defaultTheme: 'dark',
+            codeFontFamily: 'Roboto Mono, Monaco, courier, monospace',
+            bodyFontSize: '16px',
+            dark: {
+                accent: '#7986cb',
+                toogleBackground: '#ffffff',
+                background: '#1c1c1e',
+                textColor: '#e5e5ea',
+                codeBackgroundColor: '#2c2c2e'
+            },
+            light: {
+                accent: '#5c6bc0',
+                toogleBackground: '#1c1c1e',
+                background: '#ffffff',
+                textColor: '#1c1c1e',
+                codeBackgroundColor: '#f2f2f7'
+            }
+        }
     }
 </script>
+
 <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/js/docsify-themeable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/docsify-darklight-theme@3/dist/docsify-darklight-theme.index.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@2"></script>
 </body>
 </html>

@@ -1,3 +1,9 @@
+![Delight Lib](https://cdn.modrinth.com/data/rmDY6fYt/images/5d6afc0c897d26557b68c4b6ae51872d42b0ae89.png)
+
+***
+
+# Getting Started
+
 This guide details how to implement Delight Lib to streamline the creation of Farmer's Delight add-ons. It covers the fluent API for content registration and the internal architecture of the library.
 
 ## How Delight Lib Works

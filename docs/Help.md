@@ -1,0 +1,1 @@
+If you have any questions, issues, or suggestions, you can [submit a new issue](https://github.com/axperty/delightlib/issues/new), or [join the Discord server](https://discord.gg/z2E7Q78v8X).

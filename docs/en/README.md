@@ -4,6 +4,6 @@
 
 # Home
 
-- [Getting Started](en/Getting-Started): Learn how to implement Delight Lib in your mods.
-- [Create your own Farmer's Delight add-on](en/Create-your-own-Farmer's-Delight-add-on): How to make an add-on from scratch for beginners.
-- [Help](en/Help): Have any questions or need help?
+- [Getting Started](Getting-Started.md): Learn how to implement Delight Lib in your mods.
+- [Create your own Farmer's Delight add-on](Create-your-own-Farmer's-Delight-add-on.md): How to make an add-on from scratch for beginners.
+- [Help](Help.md): Have any questions or need help?

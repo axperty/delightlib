@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Delight Lib Wiki</title>
+    <title>Delight Lib Documentation</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -172,7 +172,7 @@
             max-width: var(--content-max-width) !important;
             padding: 2rem 15px 4rem 15px !important;
         }
-        img[alt="Delight Lib"] {
+        .markdown-section img {
             display: block;
             margin: 2rem auto !important;
             max-width: 100%;
@@ -182,7 +182,7 @@
             border: 1px solid rgba(107, 178, 255, 0.15);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        img[alt="Delight Lib"]:hover {
+        .markdown-section img:hover {
             transform: translateY(-4px);
             box-shadow: 0 15px 35px rgba(0,0,0,0.55), 0 0 35px rgba(107, 178, 255, 0.22);
             border-color: rgba(107, 178, 255, 0.35);
@@ -407,7 +407,8 @@
         auto2top: true,
         maxLevel: 3,
         subMaxLevel: 2,
-        nameLink: '#/'
+        nameLink: '#/',
+        externalLinkTarget: '_blank'
     }
 </script>
 <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>

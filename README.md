@@ -27,4 +27,4 @@ When using Delight Lib, you can easily implement the following blocks and items 
 
 ### Create your own add-on for Farmer's Delight
 
-For a detailed guide on how to easily create your own add-on for Farmer's Delight, [check the documentation here](https://github.com/axperty/delightlib/wiki).
+For a detailed guide on how to easily create your own add-on for Farmer's Delight, [check the documentation here](https://axperty.github.io/delightlib/).

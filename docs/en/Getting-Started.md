@@ -30,15 +30,15 @@ The library automatically listens for the GatherDataEvent. During this phase, it
 
 ## Quick Links
 
-- [[1. Dependencies](https://github.com/axperty/delightlib/wiki/Getting-Started/_edit#1-dependencies)](#1-dependencies)
-- [[2. Main Class Entrypoint](https://github.com/axperty/delightlib/wiki/Getting-Started/_edit#2-main-class-entrypoint)](#2-main-class-entrypoint)
-- [[3. Creating Knives](https://github.com/axperty/delightlib/wiki/Getting-Started/_edit#3-creating-knives)](#3-creating-knives)
-- [[4. Creating Food](https://github.com/axperty/delightlib/wiki/Getting-Started/_edit#4-creating-food)](#4-creating-food)
-- [[5. Creating Placeable Food Items](https://github.com/axperty/delightlib/wiki/Getting-Started/_edit#5-creating-placeable-food-items)](#5-creating-placeable-food-items)
-- [[6. Creating Crops](https://github.com/axperty/delightlib/wiki/Getting-Started/_edit#6-creating-crops)](#6-creating-crops)
-- [[7. Creating Storage Blocks](https://github.com/axperty/delightlib/wiki/Getting-Started/_edit#7-creating-storage-blocks)](#7-creating-storage-blocks)
-- [[8. Adding Recipes](https://github.com/axperty/delightlib/wiki/Getting-Started/_edit#8-adding-recipes)](#8-adding-recipes)
-- [[9. Generating Files](https://github.com/axperty/delightlib/wiki/Getting-Started/_edit#9-generating-files)](#9-generating-files)
+- [1. Dependencies](#1-dependencies)
+- [2. Main Class Entrypoint](#2-main-class-entrypoint)
+- [3. Creating Knives](#3-creating-knives)
+- [4. Creating Food](#4-creating-food)
+- [5. Creating Placeable Food Items](#5-creating-placeable-food-items)
+- [6. Creating Crops](#6-creating-crops)
+- [7. Creating Storage Blocks](#7-creating-storage-blocks)
+- [8. Adding Recipes](#8-adding-recipes)
+- [9. Generating Files](#9-generating-files)
 
 ## 1. Dependencies
 

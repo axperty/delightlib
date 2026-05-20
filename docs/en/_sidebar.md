@@ -1,4 +1,4 @@
-- [Home](en/README.md)
-- [Getting Started](en/Getting-Started.md)
-- [Create an Add-on](en/Create-your-own-Farmer's-Delight-add-on.md)
-- [Help](en/Help.md)
+- [Home](README.md)
+- [Getting Started](Getting-Started.md)
+- [Create an Add-on](Create-your-own-Farmer's-Delight-add-on.md)
+- [Help](Help.md)

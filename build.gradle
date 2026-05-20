@@ -10,6 +10,7 @@ repositories {
     maven { url "https://maven.parchmentmc.org" }
     maven { url "https://cursemaven.com" }
     maven { url "https://maven.fabricmc.net/" }
+    maven {url "https://jitpack.io/" }
 }
 
 dependencies {
@@ -25,6 +26,9 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
     modImplementation "curse.maven:farmers-delight-refabricated-993166:7660064"
+    include(modImplementation("com.github.Chocohead:Fabric-ASM:${fabric_asm_version}")) {
+        exclude (group: "net.fabricmc.fabric-api")
+    }
 }
 
 def expandProps = [

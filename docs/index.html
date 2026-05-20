@@ -4,17 +4,44 @@
     <meta charset="UTF-8">
     <title>Delight Lib Wiki</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.css" id="theme-light">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css" id="theme-dark" media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.css">
 
     <style>
         :root {
             --base-font-size: 16px;
-            --theme-color: #5c6bc0;
-            --cover-background: #fafafa;
             --sidebar-width: 280px;
+
+            /* Main Background */
+            --base-background: #195392;
+            --content-background: #195392;
+            --sidebar-background: #195392;
+
+            /* Primary Texts and Accents */
+            --theme-color: #6bb2ff;
+            --base-color: #ffffff;
+            --heading-color: #6bb2ff;
+            --sidebar-name-color: #6bb2ff;
+            --sidebar-toggle-color: #6bb2ff;
+
+            /* Links and Sidebar items */
+            --link-color: #6bb2ff;
+            --sidebar-nav-link-color: #ffffff;
+            --sidebar-nav-link-color--active: #6bb2ff;
+
+            /* Borders and Dividers */
+            --base-border-color: #6bb2ff;
+            --sidebar-border-color: #6bb2ff;
+            --hr-border-color: #6bb2ff;
+            --table-border-color: #6bb2ff;
+
+            /* Code Blocks */
+            --code-block-background: #0f3866;
+            --code-block-color: #ffffff;
+            --code-inline-background: #0f3866;
+            --code-inline-color: #6bb2ff;
         }
 
+        /* Landing Page Specific Rules */
         img[alt="Delight Lib"] {
             display: block;
             margin: 2rem auto;
@@ -30,16 +57,17 @@
 
         .lang-btn {
             padding: 10px 20px;
-            border: 2px solid var(--theme-color);
+            border: 2px solid #6bb2ff !important;
             border-radius: 6px;
+            color: #6bb2ff !important;
             text-decoration: none !important;
             font-weight: bold;
             transition: all 0.2s ease;
         }
 
         .lang-btn:hover {
-            background-color: var(--theme-color);
-            color: white !important;
+            background-color: #6bb2ff;
+            color: #195392 !important;
         }
     </style>
 </head>
@@ -54,34 +82,12 @@
         auto2top: true,
         maxLevel: 3,
         subMaxLevel: 2,
-        nameLink: '#/',
-
-        darklightTheme: {
-            siteFont: 'Source Sans Pro, Helvetica Neue, Arial, sans-serif',
-            defaultTheme: 'dark',
-            codeFontFamily: 'Roboto Mono, Monaco, courier, monospace',
-            bodyFontSize: '16px',
-            dark: {
-                accent: '#7986cb',
-                toogleBackground: '#ffffff',
-                background: '#1c1c1e',
-                textColor: '#e5e5ea',
-                codeBackgroundColor: '#2c2c2e'
-            },
-            light: {
-                accent: '#5c6bc0',
-                toogleBackground: '#1c1c1e',
-                background: '#ffffff',
-                textColor: '#1c1c1e',
-                codeBackgroundColor: '#f2f2f7'
-            }
-        }
+        nameLink: '#/'
     }
 </script>
 
 <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
 <script src="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/js/docsify-themeable.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/docsify-darklight-theme@3/dist/docsify-darklight-theme.index.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@2"></script>
 </body>

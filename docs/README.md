@@ -9,10 +9,9 @@ This mod is a utility library for Farmer's Delight add-on developers that makes 
 ## Select a Language:
 
 <div class="lang-switcher">
-  <li><a href="https://axperty.github.io/delightlib/en/" class="lang-btn">English</a></li>
-  <li><a href="https://minecraft.ytmango.uk/zh-tw/article/docs/delightlib/" target="_blank" class="lang-btn">繁體中文 (Chinese)</a></li>
+  <a href="https://axperty.github.io/delightlib/en/" class="lang-btn">English</a>
+  <a href="https://minecraft.ytmango.uk/zh-tw/article/docs/delightlib/" target="_blank" class="lang-btn">繁體中文 (Chinese)</a>
 </div>
-
 
 ## Support Me:
 

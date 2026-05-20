@@ -78,8 +78,18 @@ public class DelightDataGenerator implements DataProvider {
             tex.addProperty("layer0", modId + ":item/" + entry.getKey());
             model.add("textures", tex);
             futures.add(save(cache, "assets", modId, "models/item/" + entry.getKey() + ".json", model));
+            futures.add(save(cache, "assets", modId, "items/" + entry.getKey() + ".json", itemDef(modId, entry.getKey())));
         }
         return futures;
+    }
+
+    private JsonObject itemDef(String modId, String name) {
+        JsonObject def = new JsonObject();
+        JsonObject model = new JsonObject();
+        model.addProperty("type", "minecraft:model");
+        model.addProperty("model", modId + ":item/" + name);
+        def.add("model", model);
+        return def;
     }
 
     // Cabinet assets
@@ -408,9 +418,7 @@ public class DelightDataGenerator implements DataProvider {
                 JsonObject recipe = new JsonObject();
                 recipe.addProperty("type", "farmersdelight:cutting");
                 JsonArray ingredients = new JsonArray();
-                JsonObject ing = new JsonObject();
-                ing.addProperty("item", modId + ":" + food.name());
-                ingredients.add(ing);
+                ingredients.add(modId + ":" + food.name());
                 recipe.add("ingredients", ingredients);
 
                 JsonArray result = new JsonArray();
@@ -425,9 +433,7 @@ public class DelightDataGenerator implements DataProvider {
                 result.add(res);
                 recipe.add("result", result);
 
-                JsonObject tool = new JsonObject();
-                tool.addProperty("tag", "c:tools/knife");
-                recipe.add("tool", tool);
+                recipe.addProperty("tool", "#c:tools/knife");
 
                 futures.add(save(cache, "data", modId, "recipe/cutting/" + food.name() + ".json", recipe));
             } else {

@@ -31,9 +31,7 @@ public class CookingRecipeBuilder {
      * @return this builder for chaining
      */
     public CookingRecipeBuilder addIngredient(String itemId) {
-        JsonObject ing = new JsonObject();
-        ing.addProperty("item", itemId);
-        ingredients.add(ing);
+        ingredients.add(itemId);
         return this;
     }
 
@@ -44,9 +42,7 @@ public class CookingRecipeBuilder {
      * @return this builder for chaining
      */
     public CookingRecipeBuilder addTagIngredient(String tag) {
-        JsonObject ing = new JsonObject();
-        ing.addProperty("tag", tag);
-        ingredients.add(ing);
+        ingredients.add("#" + tag);
         return this;
     }
 

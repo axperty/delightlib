@@ -119,12 +119,23 @@ public class CookingRecipeBuilder {
     }
 
     /**
-     * Sets the recipe book tab for this recipe. This determines which tab the recipe will appear in when viewed in the recipe book. By default, recipes will appear in the "Misc" tab, but you can set this to a different tab if you want to organize your recipes better. The tab should be one of the following: "building_blocks", "decorations", "redstone", "transportation", "misc", or "food". Note that this does not affect which creative mode tab the result item appears in, it only affects where the recipe is shown in the recipe book.
+     * Sets the recipe book tab for this recipe in the Farmer's Delight Cooking Pot recipe book.
+     * Valid values are:
+     * <ul>
+     *   <li>{@code "meals"} – for food dishes and soups</li>
+     *   <li>{@code "drinks"} – for drinkable recipes</li>
+     *   <li>{@code "misc"} – default catch-all tab</li>
+     * </ul>
+     * Any other value will cause an {@link IllegalArgumentException} at startup.
      *
-     * @param tab the recipe book tab for this recipe. This determines which tab the recipe will appear in when viewed in the recipe book. By default, recipes will appear in the "Misc" tab, but you can set this to a different tab if you want to organize your recipes better. The tab should be one of the following: "building_blocks", "decorations", "redstone", "transportation", "misc", or "food". Note that this does not affect which creative mode tab the result item appears in, it only affects where the recipe is shown in the recipe book.
+     * @param tab one of {@code "meals"}, {@code "drinks"}, or {@code "misc"}
      * @return this builder for chaining
      */
     public CookingRecipeBuilder recipeBookTab(String tab) {
+        if (!tab.equals("meals") && !tab.equals("drinks") && !tab.equals("misc")) {
+            throw new IllegalArgumentException(
+                "Invalid recipe_book_tab '" + tab + "'. Must be one of: meals, drinks, misc");
+        }
         this.recipeBookTab = tab;
         return this;
     }

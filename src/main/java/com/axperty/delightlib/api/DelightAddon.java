@@ -10,8 +10,10 @@ import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -198,7 +200,13 @@ public class DelightAddon implements DelightApi {
         langEntries.put("block." + modId + "." + blockName, toTitleCase(blockName));
     }
 
-    // Registry helpers
+    public ResourceKey<Item> itemKey(String name) {
+        return ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(modId, name));
+    }
+
+    public ResourceKey<Block> blockKey(String name) {
+        return ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(modId, name));
+    }
 
     public Supplier<Item> registerItem(String name, Supplier<Item> supplier) {
         Item item = Registry.register(BuiltInRegistries.ITEM, Identifier.fromNamespaceAndPath(modId, name), supplier.get());

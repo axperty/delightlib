@@ -28,9 +28,9 @@ public class CrateBuilder extends RecipeRequiredBuilder<CrateBuilder> {
         addon.trackCrate(name);
 
         Supplier<Block> block = addon.registerBlock(name, () ->
-                new Block(BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(2.0f, 3.0f)));
+                new Block(BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(2.0f, 3.0f).setId(addon.blockKey(name))));
 
-        addon.registerItem(name, () -> new BlockItem(block.get(), new Item.Properties()));
+        addon.registerItem(name, () -> new BlockItem(block.get(), new Item.Properties().setId(addon.itemKey(name))));
 
         ShapedRecipeBuilder rb = addon.shapedRecipe(name);
         recipeConfig.accept(rb);

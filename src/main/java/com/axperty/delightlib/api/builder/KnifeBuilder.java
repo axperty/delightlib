@@ -65,7 +65,7 @@ public class KnifeBuilder {
         final ToolMaterial t = tier;
 
         return addon.registerItem(name, () -> {
-            Item.Properties props = new Item.Properties().attributes(KnifeItem.createAttributes(t, ad, as));
+            Item.Properties props = new Item.Properties().setId(addon.itemKey(name)).attributes(KnifeItem.createAttributes(t, ad, as));
             if (fr) props = props.fireResistant();
             return new KnifeItem(props);
         });

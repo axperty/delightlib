@@ -57,11 +57,11 @@ public class CropBuilder {
         AtomicReference<Supplier<Item>> seedHolder = new AtomicReference<>();
 
         Supplier<Block> cropBlock = addon.registerBlock(blockName, () ->
-                new DelightCropBlock(Block.Properties.ofFullCopy(Blocks.WHEAT), () -> seedHolder.get().get()));
+                new DelightCropBlock(Block.Properties.ofFullCopy(Blocks.WHEAT).setId(addon.blockKey(blockName)), () -> seedHolder.get().get()));
         addon.addCutoutBlock(cropBlock);
 
         Supplier<Item> cropItem;
-        Item.Properties properties = new Item.Properties();
+        Item.Properties properties = new Item.Properties().setId(addon.itemKey(name));
         if (isFood) {
             properties.food(new FoodProperties.Builder()
                     .nutrition(nutrition)
@@ -75,7 +75,7 @@ public class CropBuilder {
             seedHolder.set(cropItem);
         } else {
             cropItem = addon.registerItem(name, () -> new Item(properties));
-            seedHolder.set(addon.registerItem(seedName, () -> new BlockItem(cropBlock.get(), new Item.Properties())));
+            seedHolder.set(addon.registerItem(seedName, () -> new BlockItem(cropBlock.get(), new Item.Properties().setId(addon.itemKey(seedName)))));
         }
 
         addon.trackCrop(name, seedName, blockName, seedIsItem);

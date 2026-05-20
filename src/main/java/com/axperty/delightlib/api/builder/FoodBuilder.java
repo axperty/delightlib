@@ -204,7 +204,7 @@ public class FoodBuilder {
         final int stack = maxStackSize;
 
         return addon.registerItem(name, () -> {
-            Item.Properties props = new Item.Properties().food(food).component(DataComponents.CONSUMABLE, consumable).stacksTo(stack);
+            Item.Properties props = new Item.Properties().setId(addon.itemKey(name)).food(food).component(DataComponents.CONSUMABLE, consumable).stacksTo(stack);
             if (remainder != null) props = props.craftRemainder(remainder);
             return new ConsumableItem(props, effectTooltip, customTip);
         });

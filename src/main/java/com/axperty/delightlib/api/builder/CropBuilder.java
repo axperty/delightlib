@@ -2,9 +2,11 @@ package com.axperty.delightlib.api.builder;
 
 import com.axperty.delightlib.api.DelightAddon;
 import com.axperty.delightlib.internal.DelightCropBlock;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemNameBlockItem;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
@@ -65,14 +67,15 @@ public class CropBuilder {
                     .nutrition(nutrition)
                     .saturationModifier(saturation)
                     .build());
+            properties.component(DataComponents.CONSUMABLE, Consumables.defaultFood().build());
         }
 
         if (seedIsItem) {
-            cropItem = addon.registerItem(name, () -> new ItemNameBlockItem(cropBlock.get(), properties));
+            cropItem = addon.registerItem(name, () -> new BlockItem(cropBlock.get(), properties));
             seedHolder.set(cropItem);
         } else {
             cropItem = addon.registerItem(name, () -> new Item(properties));
-            seedHolder.set(addon.registerItem(seedName, () -> new ItemNameBlockItem(cropBlock.get(), new Item.Properties())));
+            seedHolder.set(addon.registerItem(seedName, () -> new BlockItem(cropBlock.get(), new Item.Properties())));
         }
 
         addon.trackCrop(name, seedName, blockName, seedIsItem);

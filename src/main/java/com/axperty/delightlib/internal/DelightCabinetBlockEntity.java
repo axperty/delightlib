@@ -1,10 +1,12 @@
 package com.axperty.delightlib.internal;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Vec3i;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -41,7 +43,7 @@ public class DelightCabinetBlockEntity extends RandomizableContainerBlockEntity 
         protected void openerCountChanged(Level level, BlockPos pos, BlockState state, int a, int b) {}
 
         @Override
-        protected boolean isOwnContainer(Player player) {
+        public boolean isOwnContainer(Player player) {
             return player.containerMenu instanceof ChestMenu menu && menu.getContainer() == DelightCabinetBlockEntity.this;
         }
     };
@@ -51,34 +53,32 @@ public class DelightCabinetBlockEntity extends RandomizableContainerBlockEntity 
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
-        if (!trySaveLootTable(tag)) ContainerHelper.saveAllItems(tag, contents, registries);
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        if (!trySaveLootTable(output)) ContainerHelper.saveAllItems(output, contents);
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
+    protected void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
         contents = NonNullList.withSize(getContainerSize(), ItemStack.EMPTY);
-        if (!tryLoadLootTable(tag)) ContainerHelper.loadAllItems(tag, contents, registries);
+        if (!tryLoadLootTable(input)) ContainerHelper.loadAllItems(input, contents);
     }
 
     @Override public int getContainerSize() { return 27; }
     @Override protected NonNullList<ItemStack> getItems() { return contents; }
     @Override protected void setItems(NonNullList<ItemStack> items) { contents = items; }
     @Override protected Component getDefaultName() {
-        net.minecraft.resources.ResourceLocation loc = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(this.getBlockState().getBlock());
+        Identifier loc = BuiltInRegistries.BLOCK.getKey(this.getBlockState().getBlock());
         return Component.translatable("container." + loc.getNamespace() + "." + loc.getPath());
     }
     @Override protected AbstractContainerMenu createMenu(int id, Inventory player) { return ChestMenu.threeRows(id, player, this); }
 
-    @Override
     public void startOpen(Player player) {
         if (level != null && !remove && !player.isSpectator())
-            openersCounter.incrementOpeners(player, level, getBlockPos(), getBlockState());
+            openersCounter.incrementOpeners(player, level, getBlockPos(), getBlockState(), 0.5D);
     }
 
-    @Override
     public void stopOpen(Player player) {
         if (level != null && !remove && !player.isSpectator())
             openersCounter.decrementOpeners(player, level, getBlockPos(), getBlockState());
@@ -95,7 +95,7 @@ public class DelightCabinetBlockEntity extends RandomizableContainerBlockEntity 
 
     private void playSound(BlockState state, SoundEvent sound) {
         if (level == null) return;
-        Vec3i facing = state.getValue(DelightCabinetBlock.FACING).getNormal();
+        Vec3i facing = state.getValue(DelightCabinetBlock.FACING).getUnitVec3i();
         double x = worldPosition.getX() + 0.5 + facing.getX() / 2.0;
         double y = worldPosition.getY() + 0.5 + facing.getY() / 2.0;
         double z = worldPosition.getZ() + 0.5 + facing.getZ() / 2.0;

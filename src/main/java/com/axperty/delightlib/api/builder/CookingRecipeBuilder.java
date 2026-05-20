@@ -81,7 +81,7 @@ public class CookingRecipeBuilder {
      * @return this builder for chaining
      */
     public CookingRecipeBuilder result(Supplier<Item> item) {
-        this.resultId = item.get().builtInRegistryHolder().key().location().toString();
+        this.resultId = item.get().builtInRegistryHolder().key().identifier().toString();
         return this;
     }
 

@@ -11,11 +11,12 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.slf4j.Logger;
@@ -74,7 +75,7 @@ public class DelightAddon implements DelightApi {
 
     public void build() {
         if (tabTitle != null) {
-            tab = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, ResourceLocation.fromNamespaceAndPath(modId, "tab"), 
+            tab = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, Identifier.fromNamespaceAndPath(modId, "tab"), 
                 FabricItemGroup.builder()
                     .title(Component.literal(tabTitle))
                     .icon(tabIcon)
@@ -88,14 +89,14 @@ public class DelightAddon implements DelightApi {
             
             BlockEntityType<DelightCabinetBlockEntity> type = Registry.register(
                 BuiltInRegistries.BLOCK_ENTITY_TYPE,
-                ResourceLocation.fromNamespaceAndPath(modId, "cabinet"),
+                Identifier.fromNamespaceAndPath(modId, "cabinet"),
                 FabricBlockEntityTypeBuilder.create((pos, state) -> new DelightCabinetBlockEntity(cabinetBlockEntityType.get(), pos, state), valid).build(null)
             );
             
             cabinetBlockEntityType = () -> type;
 
             ItemStorage.SIDED.registerForBlockEntities(
-                (be, direction) -> InventoryStorage.of((net.minecraft.world.Container) be, direction),
+                (be, direction) -> InventoryStorage.of((Container) be, direction),
                 type
             );
 
@@ -109,7 +110,7 @@ public class DelightAddon implements DelightApi {
 
     @Override
     /* {@inheritDoc} */
-    public KnifeBuilder knife(String name, Tier tier) { return new KnifeBuilder(this, name, tier); }
+    public KnifeBuilder knife(String name, ToolMaterial tier) { return new KnifeBuilder(this, name, tier); }
 
     @Override
     /* {@inheritDoc} */
@@ -200,22 +201,22 @@ public class DelightAddon implements DelightApi {
     // Registry helpers
 
     public Supplier<Item> registerItem(String name, Supplier<Item> supplier) {
-        Item item = Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(modId, name), supplier.get());
+        Item item = Registry.register(BuiltInRegistries.ITEM, Identifier.fromNamespaceAndPath(modId, name), supplier.get());
         Supplier<Item> registered = () -> item;
         creativeTabItems.add(registered);
         return registered;
     }
 
     public Supplier<Block> registerBlock(String name, Supplier<Block> supplier) {
-        Block block = Registry.register(BuiltInRegistries.BLOCK, ResourceLocation.fromNamespaceAndPath(modId, name), supplier.get());
+        Block block = Registry.register(BuiltInRegistries.BLOCK, Identifier.fromNamespaceAndPath(modId, name), supplier.get());
         return () -> block;
     }
 
     public Supplier<Item> getItem(String name) {
         if (name.contains(":")) {
-            return () -> BuiltInRegistries.ITEM.get(ResourceLocation.parse(name));
+            return () -> BuiltInRegistries.ITEM.getValue(Identifier.parse(name));
         } else {
-            return () -> BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(modId, name));
+            return () -> BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath(modId, name));
         }
     }
 

@@ -166,7 +166,7 @@ public class DelightAddon implements DelightApi {
     public void trackCabinet(String name) {
         cabinetNames.add(name);
         blockNames.add(name);
-        langEntries.put("block." + modId + "." + name, toTitleCase(name));
+        langEntries.put("item." + modId + "." + name, toTitleCase(name));
         langEntries.put("container." + modId + "." + name, toTitleCase(name));
     }
 

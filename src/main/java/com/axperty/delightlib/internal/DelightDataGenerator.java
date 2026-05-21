@@ -179,7 +179,7 @@ public class DelightDataGenerator implements DataProvider {
             for (int age = 0; age <= 7; age++) {
                 JsonObject m = new JsonObject();
                 m.addProperty("parent", "minecraft:block/crop");
-                m.addProperty("render_type", "minecraft:cutout");
+                //m.addProperty("render_type", "minecraft:cutout");
                 JsonObject tex = new JsonObject();
                 tex.addProperty("crop", modId + ":block/" + crop.blockName() + "_stage" + age);
                 m.add("textures", tex);

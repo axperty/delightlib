@@ -122,7 +122,7 @@ public class PlaceableFoodBuilder {
     }
 
     /**
-     * Builds the placeable food item and registers the corresponding block. The block will be registered with the same name as this placeable food, and the item will be registered with the same name as well. The block will have the same properties as a cake block, but with the appropriate behavior for either a pie or a feast depending on how this builder was configured. The item will be a PlaceableItem that places the corresponding block when used.
+     * Builds the placeable food item and registers the corresponding block. The block will be registered with the same name as this placeable food, and the item will be registered with the same name as well. The block will have the same properties as a cake block, but with the appropriate behavior for either a pie or a feast depending on how this builder was configured. The item will be a BlockItem that places the corresponding block when used.
      *
      * @return a Supplier that provides the built Item instance for this placeable food. This allows for lazy initialization of the item, which can be important for certain registration timing requirements in Minecraft modding.
      */
@@ -137,16 +137,18 @@ public class PlaceableFoodBuilder {
         switch (foodType) {
             case PIE -> {
                 final Supplier<Item> slice = sliceItem;
-                block = addon.registerBlock(name, () -> new PieBlock(Block.Properties.ofFullCopy(Blocks.CAKE).setId(addon.blockKey(name)), slice));
+                block = addon.registerBlock(name, () -> new PieBlock(addon.defaultBlockProperties(name, Block.Properties.ofFullCopy(Blocks.CAKE)), slice));
+                addon.addCutoutBlock(block);
             }
             case FEAST -> {
                 final Supplier<Item> serving = servingItem;
                 final Supplier<Item> output = feastOutputItem;
-                block = addon.registerBlock(name, () -> new FeastBlock(Block.Properties.ofFullCopy(Blocks.CAKE).setId(addon.blockKey(name)), serving, output != null));
+                block = addon.registerBlock(name, () -> new FeastBlock(addon.defaultBlockProperties(name, Block.Properties.ofFullCopy(Blocks.CAKE)), serving, output != null));
+                addon.addCutoutBlock(block);
             }
         }
         Supplier<Block> finalBlock = block;
-        addon.addCutoutBlock(finalBlock);
-        return addon.registerItem(name, () -> new BlockItem(finalBlock.get(), new Item.Properties().setId(addon.itemKey(name)).stacksTo(stack)));
+
+        return addon.registerItem(name, () -> new BlockItem(finalBlock.get(), addon.defaultItemProperties(name).stacksTo(stack)));
     }
 }

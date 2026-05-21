@@ -21,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -198,6 +199,15 @@ public class DelightAddon implements DelightApi {
             langEntries.put("item." + modId + "." + seedName, toTitleCase(seedName));
         }
         langEntries.put("block." + modId + "." + blockName, toTitleCase(blockName));
+    }
+
+    // Helper methods for properties (mandatory in 1.21.2)
+    public Item.Properties defaultItemProperties(String name) {
+        return new Item.Properties().setId(ResourceKey.create(BuiltInRegistries.ITEM.key(), Identifier.fromNamespaceAndPath(modId, name)));
+    }
+
+    public BlockBehaviour.Properties defaultBlockProperties(String name, BlockBehaviour.Properties props) {
+        return props.setId(ResourceKey.create(BuiltInRegistries.BLOCK.key(), Identifier.fromNamespaceAndPath(modId, name)));
     }
 
     public ResourceKey<Item> itemKey(String name) {

@@ -2,9 +2,9 @@
 
 ***
 
-### 🛠️ Minor Changes:
+### ✨ What's New:
 
-- Fixed crops and placeable food items not having a transparent texture background.
+- Added support for Farmer's Delight Refabricated latest/1.21.11.
 
 ***
 
